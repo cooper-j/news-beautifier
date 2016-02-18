@@ -17,9 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.github.newsbeautifier.fragments.HomeFragment;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.newsbeautifier.fragments.RSSFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -31,11 +29,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        List<String> mTitles = new ArrayList<>();
-        mTitles.add("Home");
+        mDrawerList = (ListView) navigationView.getHeaderView(0).findViewById(R.id.left_drawer);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,9 +43,16 @@ public class HomeActivity extends AppCompatActivity {
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_selectable_list_item, mTitles));
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_items)));
+
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        selectItem(0);
     }
 
     @Override
@@ -88,7 +91,13 @@ public class HomeActivity extends AppCompatActivity {
 
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
-        Fragment fragment = new HomeFragment();
+        Fragment fragment = null;
+
+        if (position == 0){
+            fragment = new HomeFragment();
+        } else if (position == 1){
+            fragment = new RSSFragment();
+        }
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
