@@ -36,6 +36,8 @@
                 style="?android:attr/listViewStyle"
 
                 android:id="@+id/feed_list_view"
+                android:divider="@null"
+                android:choiceMode="singleChoice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

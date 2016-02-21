@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
 
         // Set the adapter for the list view
         mHeaderList.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_items)));
+                R.layout.header_item, getResources().getStringArray(R.array.nav_items)));
 
         mHeaderList.setOnItemClickListener(new DrawerItemClickListener());
 
