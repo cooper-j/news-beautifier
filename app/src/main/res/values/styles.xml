@@ -17,4 +17,20 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="drawer_subtitle">
+        <item name="android:textColor">@color/drawer_subtitle_color</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+    <style name="drawer_item">
+        <item name="android:textColor">@color/drawer_item_color</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
 </resources>

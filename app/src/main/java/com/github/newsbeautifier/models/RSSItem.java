@@ -1,10 +1,18 @@
 package com.github.newsbeautifier.models;
 
+import com.github.newsbeautifier.MyDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 /**
  * * NewsBeautifier
  * Created by jerem_000 on 2/18/2016.
  */
-public class RSSItem {
+
+@Table(database = MyDatabase.class)
+public class RSSItem extends BaseModel {
     public static final String TITLE_TAG = "title";
     public static final String CATEGORY_TAG = "category";
     public static final String LANGUAGE_TAG = "language";
@@ -15,86 +23,108 @@ public class RSSItem {
     public static final String PUBDATE_TAG = "published";
     public static final String PUBDATE_TAG2 = "pubDate";
 
-    private String mTitle = "";
-    private String mCategory = "";
-    private String mContent = "";
-    private String mLanguage = "";
-    private String mDescription = "";
-    private String mLink = "";
-    private String mAuthor = "";
-    private String mPubDate = "";
 
-    public RSSItem(String title, String content, String link) {
-        this.mTitle = title;
-        this.mContent = content;
-        this.mLink = link;
-    }
+    @Column
+    private String feedLink;
+
+    @PrimaryKey
+    @Column
+    private String title = "";
+
+    @Column
+    private String category = "";
+
+    @Column
+    private String content = "";
+
+    @Column
+    private String language = "";
+
+    @Column
+    private String description = "";
+
+    @Column
+    private String link = "";
+
+    @Column
+    private String author = "";
+
+    @Column
+    private String pubDate = "";
 
     public RSSItem() {
 
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String pTitle) {
-        mTitle = pTitle;
+        title = pTitle;
     }
 
     public String getContent() {
-        return mContent;
+        return content;
     }
 
     public void setContent(String pContent) {
-        mContent = pContent;
+        content = pContent;
     }
 
     public String getLink() {
-        return mLink;
+        return link;
     }
 
     public void setLink(String pLink) {
-        mLink = pLink;
+        link = pLink;
     }
 
     public String getAuthor() {
-        return mAuthor;
+        return author;
     }
 
     public void setAuthor(String pAuthor) {
-        mAuthor = pAuthor;
+        author = pAuthor;
     }
 
     public String getPubDate() {
-        return mPubDate;
+        return pubDate;
     }
 
     public void setPubDate(String pPubdate) {
-        mPubDate = pPubdate;
+        pubDate = pPubdate;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
     public void setDescription(String pDescription) {
-        mDescription = pDescription;
+        description = pDescription;
     }
 
     public String getLanguage() {
-        return mLanguage;
+        return language;
     }
 
     public void setLanguage(String pLanguage) {
-        mLanguage = pLanguage;
+        language = pLanguage;
     }
 
     public String getCategory() {
-        return mCategory;
+        return category;
     }
 
     public void setCategory(String pCategory) {
-        mCategory = pCategory;
+        category = pCategory;
+    }
+
+    public String getFeedLink() {
+        return feedLink;
+    }
+
+    public void setFeedLink(String feedlink) {
+        feedLink = feedlink;
     }
 }

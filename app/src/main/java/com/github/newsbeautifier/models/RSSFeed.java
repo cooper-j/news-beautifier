@@ -1,5 +1,13 @@
 package com.github.newsbeautifier.models;
 
+import com.github.newsbeautifier.MyDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ModelContainer;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +15,10 @@ import java.util.List;
  * * NewsBeautifier
  * Created by jerem_000 on 2/18/2016.
  */
-public class RSSFeed {
+
+@ModelContainer
+@Table(database = MyDatabase.class)
+public class RSSFeed extends BaseModel{
     public static final String FEED_TAG = "feed";
     public static final String ENTRY_TAG = "entry";
     public static final String ITEM_TAG = "item";
@@ -22,81 +33,140 @@ public class RSSFeed {
     public static final String LANGUAGE_ATTRIBUTE = "xml:lang";
     public static final String CHANNEL_TAG = "channel";
     public static final String LANGUAGE_TAG = "language";
+    public static final String IMAGE_TAG = "image";
 
-    private String mTitle = "";
-    private String mCategory = "";
-    private String mIcon = "";
-    private String mLink = "";
-    private String mDescription = "";
-    private String mLanguage = "";
-    private String mUpdatedDate = "";
-    private List<RSSItem> mItems = new ArrayList<>();
+    @PrimaryKey
+    @Column
+    private String link = "";
+
+    @Column
+    private String title = "";
+
+    @Column
+    private String category = "";
+
+    @Column
+    private String icon = "";
+
+    @Column
+    private String description = "";
+
+    @Column
+    private String language = "";
+
+    @Column
+    private String updatedDate = "";
+
+    List<RSSItem> items = new ArrayList<>();
+
+    @Column
+    private String image;
+
+    @Column
+    Long userId;
+
+    public RSSFeed(){
+
+    }
+
+    public RSSFeed(String link) {
+        this.link = link;
+    }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String pTitle) {
-        mTitle = pTitle;
+        title = pTitle;
     }
 
     public String getIcon() {
-        return mIcon;
+        return icon;
     }
 
     public void setIcon(String pIcon) {
-        mIcon = pIcon;
+        icon = pIcon;
     }
 
     public String getLink() {
-        return mLink;
+        return link;
     }
 
     public void setLink(String pLink) {
-        mLink = pLink;
+        link = pLink;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
     public void setDescription(String pDescription) {
-        mDescription = pDescription;
+        description = pDescription;
     }
 
     public String getLanguage() {
-        return mLanguage;
+        return language;
     }
 
     public void setLanguage(String pLanguage) {
-        mLanguage = pLanguage;
+        language = pLanguage;
     }
 
     public String getUpdatedDate() {
-        return mUpdatedDate;
+        return updatedDate;
     }
 
     public void setUpdatedDate(String pUpdateddate) {
-        mUpdatedDate = pUpdateddate;
+        updatedDate = pUpdateddate;
     }
 
     public List<RSSItem> getItems() {
-        return mItems;
+        if (items == null || items.size() == 0){
+            items = SQLite.select()
+                    .from(RSSItem.class)
+                    .where(RSSItem_Table.feedLink.eq(link))
+                    .queryList();
+        }
+        return items;
     }
 
     public void setItems(List<RSSItem> pItems) {
-        mItems = pItems;
+        items = pItems;
     }
 
     public void addEntry(RSSItem item) {
-        this.mItems.add(item);
+        this.items.add(item);
     }
 
     public String getCategory() {
-        return mCategory;
+        return category;
     }
 
     public void setCategory(String pCategory) {
-        mCategory = pCategory;
+        category = pCategory;
     }
+
+    @Override
+    public String toString() {
+        return title == null || title.isEmpty() ? link : title;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userid) {
+        userId = userid;
+    }
+
+
 }

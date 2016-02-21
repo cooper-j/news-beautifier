@@ -18,20 +18,25 @@ import android.widget.ListView;
 
 import com.github.newsbeautifier.fragments.HomeFragment;
 import com.github.newsbeautifier.fragments.RSSFragment;
+import com.github.newsbeautifier.models.RSSFeed;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyFeedsChanged{
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    private ListView mHeaderList;
+    private NavigationView mNavigationView;
+    private ListView mFeedListView;
+    private FeedAdapter mFeedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) navigationView.getHeaderView(0).findViewById(R.id.left_drawer);
+        mHeaderList = (ListView) mNavigationView.getHeaderView(0).findViewById(R.id.left_drawer);
+        mFeedListView = (ListView) findViewById(R.id.feed_list_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,11 +47,27 @@ public class HomeActivity extends AppCompatActivity {
         toggle.syncState();
 
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
+        mHeaderList.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.nav_items)));
 
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mHeaderList.setOnItemClickListener(new DrawerItemClickListener());
+
+        initMyFeeds();
+    }
+
+    private void initMyFeeds() {
+        mFeedAdapter = new FeedAdapter();
+        mFeedListView.setAdapter(mFeedAdapter);
+        mFeedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                RSSFeed item = mFeedAdapter.getItem(position);
+                item.setUserId(null);
+                item.update();
+                mFeedAdapter.remove(mFeedAdapter.getItem(position));
+                return false;
+            }
+        });
     }
 
     @Override
@@ -82,6 +103,11 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onMyFeedsChanged() {
+        mFeedAdapter.notifyDataSetChanged();
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,7 +132,13 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
 
         // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
+        mHeaderList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private class FeedAdapter extends ArrayAdapter<RSSFeed>{
+        public FeedAdapter(){
+            super(HomeActivity.this, R.layout.menu_feed_item, ((MyApplication)getApplication()).mUser.getFeeds());
+        }
     }
 }

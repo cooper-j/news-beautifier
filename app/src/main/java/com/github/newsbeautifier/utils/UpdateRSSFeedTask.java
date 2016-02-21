@@ -18,12 +18,12 @@ import java.net.URL;
  * * NewsBeautifier
  * Created by jerem_000 on 2/18/2016.
  */
-public abstract class RSSParserTask extends AsyncTask<String, Boolean, RSSFeed> {
-    public static final String[] RSS_FEEDS = {
-            "http://www.theverge.com/rss/frontpage",
-            "http://www.jeuxvideo.com/rss/rss-ps4.xml",
-            "https://news.google.fr/news?cf=all&hl=fr&pz=1&ned=fr&output=rss",
-            "http://feeds.feedburner.com/Mobilecrunch"
+public abstract class UpdateRSSFeedTask extends AsyncTask<RSSFeed, Boolean, RSSFeed> {
+    public static final RSSFeed[] RSS_FEEDS = {
+            new RSSFeed("http://www.theverge.com/rss/frontpage"),
+            new RSSFeed("http://www.jeuxvideo.com/rss/rss-ps4.xml"),
+            new RSSFeed("https://news.google.fr/news?cf=all&hl=fr&pz=1&ned=fr&output=rss"),
+            new RSSFeed("http://feeds.feedburner.com/Mobilecrunch")
     };
 
     private static final String ns = null;
@@ -31,22 +31,25 @@ public abstract class RSSParserTask extends AsyncTask<String, Boolean, RSSFeed> 
     private static final int CONNECT_TIMEOUT = 15000;
 
     @Override
-    protected RSSFeed doInBackground(String... params) {
+    protected RSSFeed doInBackground(RSSFeed... params) {
         if (params.length == 0){
             return new RSSFeed();
         }
-        InputStream in = readFromUrl(params[0]);
+        InputStream in = readFromUrl(params[0].getLink());
         if (in == null){
-            return new RSSFeed();
+            return params[0];
         }
 
-        return readRssFeed(in);
+        return readRssFeed(in, params[0]);
     }
 
-    private RSSFeed readRssFeed(InputStream in) {
-        RSSFeed feed = new RSSFeed();
+    private RSSFeed readRssFeed(InputStream in, RSSFeed feed) {
         XmlPullParser parser = Xml.newPullParser();
 
+        for (RSSItem item : feed.getItems()){
+            item.delete();
+        }
+        feed.getItems().clear();
         try {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
@@ -68,6 +71,9 @@ public abstract class RSSParserTask extends AsyncTask<String, Boolean, RSSFeed> 
                         break;
                     case RSSFeed.TITLE_TAG:
                         feed.setTitle(readText(parser));
+                        break;
+                    case RSSFeed.IMAGE_TAG:
+                        feed.setImage(readImage(parser));
                         break;
                     case RSSFeed.DESCRIPTION_TAG:
                         feed.setDescription(readText(parser));
@@ -100,8 +106,36 @@ public abstract class RSSParserTask extends AsyncTask<String, Boolean, RSSFeed> 
             }
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
+            return null;
+        }
+        if (feed.exists()){
+            feed.update();
+        } else {
+            feed.save();
+        }
+        for (RSSItem item : feed.getItems()){
+            item.setFeedLink(feed.getLink());
+            item.save();
         }
         return feed;
+    }
+
+    private String readImage(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String url = "";
+        parser.require(XmlPullParser.START_TAG, ns, RSSFeed.IMAGE_TAG);
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String name = parser.getName();
+
+            if (name.equals("url")) {
+                url = readText(parser);
+                parser.nextTag();
+            }
+        }
+        return url;
     }
 
     private String readLanguage(XmlPullParser parser) throws IOException, XmlPullParserException {
