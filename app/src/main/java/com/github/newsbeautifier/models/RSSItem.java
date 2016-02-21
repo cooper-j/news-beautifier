@@ -1,5 +1,8 @@
 package com.github.newsbeautifier.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.github.newsbeautifier.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -12,7 +15,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 
 @Table(database = MyDatabase.class)
-public class RSSItem extends BaseModel {
+public class RSSItem extends BaseModel implements Parcelable{
     public static final String TITLE_TAG = "title";
     public static final String CATEGORY_TAG = "category";
     public static final String LANGUAGE_TAG = "language";
@@ -55,6 +58,30 @@ public class RSSItem extends BaseModel {
     public RSSItem() {
 
     }
+
+    protected RSSItem(Parcel in) {
+        feedLink = in.readString();
+        title = in.readString();
+        category = in.readString();
+        content = in.readString();
+        language = in.readString();
+        description = in.readString();
+        link = in.readString();
+        author = in.readString();
+        pubDate = in.readString();
+    }
+
+    public static final Creator<RSSItem> CREATOR = new Creator<RSSItem>() {
+        @Override
+        public RSSItem createFromParcel(Parcel in) {
+            return new RSSItem(in);
+        }
+
+        @Override
+        public RSSItem[] newArray(int size) {
+            return new RSSItem[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -126,5 +153,23 @@ public class RSSItem extends BaseModel {
 
     public void setFeedLink(String feedlink) {
         feedLink = feedlink;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(feedLink);
+        dest.writeString(title);
+        dest.writeString(category);
+        dest.writeString(content);
+        dest.writeString(language);
+        dest.writeString(description);
+        dest.writeString(link);
+        dest.writeString(author);
+        dest.writeString(pubDate);
     }
 }

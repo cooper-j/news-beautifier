@@ -1,5 +1,8 @@
 package com.github.newsbeautifier.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.github.newsbeautifier.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
@@ -18,7 +21,7 @@ import java.util.List;
 
 @ModelContainer
 @Table(database = MyDatabase.class)
-public class RSSFeed extends BaseModel{
+public class RSSFeed extends BaseModel implements Parcelable{
     public static final String FEED_TAG = "feed";
     public static final String ENTRY_TAG = "entry";
     public static final String ITEM_TAG = "item";
@@ -72,6 +75,30 @@ public class RSSFeed extends BaseModel{
     public RSSFeed(String link) {
         this.link = link;
     }
+
+    protected RSSFeed(Parcel in) {
+        link = in.readString();
+        title = in.readString();
+        category = in.readString();
+        icon = in.readString();
+        description = in.readString();
+        language = in.readString();
+        updatedDate = in.readString();
+        items = in.createTypedArrayList(RSSItem.CREATOR);
+        image = in.readString();
+    }
+
+    public static final Creator<RSSFeed> CREATOR = new Creator<RSSFeed>() {
+        @Override
+        public RSSFeed createFromParcel(Parcel in) {
+            return new RSSFeed(in);
+        }
+
+        @Override
+        public RSSFeed[] newArray(int size) {
+            return new RSSFeed[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -169,4 +196,21 @@ public class RSSFeed extends BaseModel{
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(link);
+        dest.writeString(title);
+        dest.writeString(category);
+        dest.writeString(icon);
+        dest.writeString(description);
+        dest.writeString(language);
+        dest.writeString(updatedDate);
+        dest.writeTypedList(items);
+        dest.writeString(image);
+    }
 }

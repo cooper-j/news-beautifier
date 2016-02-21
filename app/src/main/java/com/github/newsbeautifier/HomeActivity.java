@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.github.newsbeautifier.fragments.FeedFragment;
 import com.github.newsbeautifier.fragments.HomeFragment;
 import com.github.newsbeautifier.fragments.RSSFragment;
 import com.github.newsbeautifier.models.RSSFeed;
@@ -50,7 +51,7 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         mHeaderList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.header_item, getResources().getStringArray(R.array.nav_items)));
 
-        mHeaderList.setOnItemClickListener(new DrawerItemClickListener());
+        mHeaderList.setOnItemClickListener(new HeaderItemClickListener());
 
         initMyFeeds();
     }
@@ -68,12 +69,34 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
                 return false;
             }
         });
+        mFeedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectFeed(mFeedAdapter.getItem(position));
+            }
+        });
+    }
+
+    private void selectFeed(RSSFeed item) {
+        FeedFragment feedFragment = new FeedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(FeedFragment.FEED, item);
+        feedFragment.setArguments(bundle);
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        mHeaderList.clearChoices();
+        mHeaderList.requestLayout();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, feedFragment)
+                .commit();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        selectItem(0);
+        selectHeaderItem(0);
     }
 
     @Override
@@ -108,15 +131,15 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         mFeedAdapter.notifyDataSetChanged();
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+    private class HeaderItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            selectHeaderItem(position);
         }
     }
 
     /** Swaps fragments in the main content view */
-    private void selectItem(int position) {
+    private void selectHeaderItem(int position) {
         Fragment fragment = null;
 
         if (position == 0){
