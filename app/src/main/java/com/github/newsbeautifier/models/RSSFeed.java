@@ -43,6 +43,9 @@ public class RSSFeed extends BaseModel implements Parcelable{
     private String link = "";
 
     @Column
+    private String url = "";
+
+    @Column
     private String title = "";
 
     @Column
@@ -72,12 +75,13 @@ public class RSSFeed extends BaseModel implements Parcelable{
 
     }
 
-    public RSSFeed(String link) {
-        this.link = link;
+    public RSSFeed(String url) {
+        this.url = url;
     }
 
     protected RSSFeed(Parcel in) {
         link = in.readString();
+        url = in.readString();
         title = in.readString();
         category = in.readString();
         icon = in.readString();
@@ -204,6 +208,7 @@ public class RSSFeed extends BaseModel implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(link);
+        dest.writeString(url);
         dest.writeString(title);
         dest.writeString(category);
         dest.writeString(icon);
@@ -212,5 +217,13 @@ public class RSSFeed extends BaseModel implements Parcelable{
         dest.writeString(updatedDate);
         dest.writeTypedList(items);
         dest.writeString(image);
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
