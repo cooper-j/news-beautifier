@@ -6,6 +6,15 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_rss">RSS</string>
+    <string name="drawer_feed_title">My feeds</string>
+
+    <string-array name="nav_items" translatable="false">
+        <item>@string/menu_home</item>
+        <item>@string/menu_rss</item>
+    </string-array>
+
 </resources>
