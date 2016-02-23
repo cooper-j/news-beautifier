@@ -9,25 +9,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.github.newsbeautifier.fragments.FeedFragment;
+import com.github.newsbeautifier.fragments.FeedListFragment;
 import com.github.newsbeautifier.fragments.HomeFragment;
 import com.github.newsbeautifier.fragments.RSSFragment;
 import com.github.newsbeautifier.models.RSSFeed;
 
-public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyFeedsChanged{
+public class HomeActivity extends AppCompatActivity implements FeedListFragment.OnMyFeedsChanged{
 
     private DrawerLayout mDrawerLayout;
     private ListView mHeaderList;
     private NavigationView mNavigationView;
     private ListView mFeedListView;
     private FeedAdapter mFeedAdapter;
+    private String[] mTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +37,8 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mHeaderList = (ListView) mNavigationView.getHeaderView(0).findViewById(R.id.left_drawer);
         mFeedListView = (ListView) findViewById(R.id.feed_list_view);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -47,12 +46,16 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        // Set the adapter for the list view
+        mTitles = getResources().getStringArray(R.array.nav_items);
         mHeaderList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.header_item, getResources().getStringArray(R.array.nav_items)));
+                R.layout.header_item, mTitles));
 
         mHeaderList.setOnItemClickListener(new HeaderItemClickListener());
 
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+        if (tabletSize) {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        }
         initMyFeeds();
     }
 
@@ -78,10 +81,10 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
     }
 
     private void selectFeed(RSSFeed item) {
-        FeedFragment feedFragment = new FeedFragment();
+        RSSFragment feedListFragment = new RSSFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(FeedFragment.FEED, item);
-        feedFragment.setArguments(bundle);
+        bundle.putParcelable(RSSFragment.FEED, item);
+        feedListFragment.setArguments(bundle);
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         mHeaderList.clearChoices();
@@ -89,7 +92,7 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, feedFragment)
+                .replace(R.id.content_frame, feedListFragment)
                 .commit();
     }
 
@@ -107,23 +110,6 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                return true;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -145,7 +131,7 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         if (position == 0){
             fragment = new HomeFragment();
         } else if (position == 1){
-            fragment = new RSSFragment();
+            fragment = new FeedListFragment();
         }
 
         // Insert the fragment by replacing any existing fragment
@@ -157,6 +143,11 @@ public class HomeActivity extends AppCompatActivity implements RSSFragment.OnMyF
         // Highlight the selected item, update the title, and close the drawer
         mHeaderList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (position >= 0 && position < mTitles.length) {
+            setTitle(mTitles[position]);
+        } else {
+            setTitle(getString(R.string.app_name));
+        }
     }
 
     private class FeedAdapter extends ArrayAdapter<RSSFeed>{

@@ -4,12 +4,18 @@
     android:layout_height="match_parent"
     tools:context="com.github.newsbeautifier.fragments.HomeFragment">
 
- <ListView
-     style="?android:attr/listViewStyle"
+    <ListView
+        style="?android:attr/listViewStyle"
 
-     android:id="@+id/list_view"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent">
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
- </ListView>
+    <ListView
+        style="?android:attr/listViewStyle"
+
+        android:id="@+id/result_list_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
