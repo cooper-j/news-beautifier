@@ -18,6 +18,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 public class RSSItem extends BaseModel implements Parcelable{
     public static final String TITLE_TAG = "title";
     public static final String CATEGORY_TAG = "category";
+    public static final String THUMBNAIL_TAG = "media:thumbnail";
     public static final String LANGUAGE_TAG = "language";
     public static final String DESCRIPTION_TAG = "description";
     public static final String CONTENT_TAG = "content";

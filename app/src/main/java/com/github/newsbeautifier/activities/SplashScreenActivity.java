@@ -49,14 +49,18 @@ public class SplashScreenActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         if (feeds.lastIndexOf(feed) == feeds.size() - 1){
-                            startActivity(new Intent(SplashScreenActivity.this, HomeActivity.class));
+                            Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (feeds.lastIndexOf(feed) == feeds.size() - 1){
-                    startActivity(new Intent(SplashScreenActivity.this, HomeActivity.class));
+                    Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
             }
         });

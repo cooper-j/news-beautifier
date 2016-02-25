@@ -19,8 +19,8 @@ import java.net.URL;
  */
 public class RSSParser {
     public static final RSSFeed[] RSS_FEEDS = {
-            new RSSFeed("http://com.clubic.feedsportal.com/c/33464/f/581988/index.rss"),
             new RSSFeed("http://feeds.feedburner.com/Phonandroid"),
+            new RSSFeed("http://com.clubic.feedsportal.com/c/33464/f/581988/index.rss"),
             new RSSFeed("https://news.google.fr/news?cf=all&hl=fr&pz=1&ned=fr&output=rss"),
             new RSSFeed("http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"),
             new RSSFeed("http://www.npr.org/rss/rss.php?id=1001")
@@ -29,7 +29,6 @@ public class RSSParser {
     private static final String ns = null;
     private static final int READ_TIMEOUT = 10000;
     private static final int CONNECT_TIMEOUT = 15000;
-
 
     private static RSSParser _instance = null;
 
@@ -155,7 +154,7 @@ public class RSSParser {
 
             switch (name) {
                 case RSSItem.TITLE_TAG:
-                    item.setTitle(readTitle(parser));
+                    item.setTitle(readText(parser));
                     break;
                 case RSSItem.CONTENT_TAG:
                     item.setContent(readText(parser));
@@ -169,7 +168,7 @@ public class RSSParser {
                     item.setCategory(readText(parser));
                     break;
                 case RSSItem.LINK_TAG:
-                    item.setLink(readLink(parser));
+                    item.setLink(readText(parser));
                     break;
                 case RSSItem.AUTHOR_TAG:
                     item.setAuthor(readAuthor(parser));
@@ -181,12 +180,18 @@ public class RSSParser {
                 case RSSItem.PUBDATE_TAG2:
                     item.setPubDate(readText(parser));
                     break;
+                case RSSItem.THUMBNAIL_TAG:
+                    item.setImage(readThumbNail(parser));
                 default:
                     skip(parser);
                     break;
             }
         }
         return item;
+    }
+
+    private String readThumbNail(XmlPullParser parser) throws IOException, XmlPullParserException {
+        return parser.getAttributeValue(null, "url");
     }
 
     private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {

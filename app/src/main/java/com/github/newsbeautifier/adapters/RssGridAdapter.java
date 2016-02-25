@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.User;
@@ -69,12 +68,13 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        Glide.with(mContext).load(mRssList.get(position).getIcon()).into(holder.rssImage);
-        holder.rssName.setText(mRssList.get(position).getTitle());
-        holder.stateIcon.setVisibility(View.GONE);
+        if (mRssList.get(position) != null) {
+            Glide.with(mContext).load(mRssList.get(position).getIcon()).into(holder.rssImage);
+            holder.rssName.setText(mRssList.get(position).getTitle());
+            holder.stateIcon.setVisibility(View.GONE);
 
-        convertView.setOnClickListener(new OnRssFeedClick(holder));
-
+            convertView.setOnClickListener(new OnRssFeedClick(holder));
+        }
         return convertView;
     }
 

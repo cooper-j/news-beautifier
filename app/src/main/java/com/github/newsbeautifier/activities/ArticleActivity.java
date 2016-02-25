@@ -1,6 +1,7 @@
 package com.github.newsbeautifier.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -31,11 +32,11 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle("Article");
 
         findViewById(R.id.share_fab).setOnClickListener(this);
 
         mModel = getIntent().getParcelableExtra(ARTICLE);
+        collapsingToolbarLayout.setTitle(mModel.getCategory().isEmpty() ? "Article" : mModel.getCategory());
         initViews();
     }
 
@@ -45,13 +46,25 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         TextView pubDate = (TextView) findViewById(R.id.article_published_date);
         TextView content = (TextView) findViewById(R.id.article_content);
         TextView description = (TextView) findViewById(R.id.article_description);
+        TextView link = (TextView) findViewById(R.id.article_link);
+
         ImageView cover = (ImageView) findViewById(R.id.article_cover);
         ImageView image = (ImageView) findViewById(R.id.article_image);
 
         title.setText(Html.fromHtml(mModel.getTitle() != null ? mModel.getTitle() : ""));
         author.setText(getString(R.string.article_author, mModel.getAuthor()));
         pubDate.setText(getString(R.string.article_pubDate, mModel.getPubDate()));
-
+        if (mModel.getLink().isEmpty()){
+            link.setVisibility(View.GONE);
+        } else {
+            link.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getLink()));
+                    startActivity(browserIntent);
+                }
+            });
+        }
         // set content
         URLImageParser p = new URLImageParser(content, this);
         Spanned contentSpan = Html.fromHtml(mModel.getContent(), p, null);
