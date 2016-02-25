@@ -42,6 +42,7 @@ public class FeedSelectFragment extends Fragment {
         tmpList.add(RSSParser.RSS_FEEDS[1]);
         tmpList.add(RSSParser.RSS_FEEDS[2]);
         tmpList.add(RSSParser.RSS_FEEDS[3]);
+        tmpList.add(RSSParser.RSS_FEEDS[4]);
         boolean contained = false;
         for (RSSFeed feed : tmpList) {
             for (RSSFeed feed2 : mRssList)
