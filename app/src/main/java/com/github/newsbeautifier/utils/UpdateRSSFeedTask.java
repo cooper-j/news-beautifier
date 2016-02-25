@@ -10,7 +10,7 @@ import java.io.InputStream;
  * * NewsBeautifier
  * Created by jerem_000 on 2/18/2016.
  */
-public abstract class UpdateRSSFeedTask extends AsyncTask<RSSFeed, Boolean, RSSFeed> {
+public class UpdateRSSFeedTask extends AsyncTask<RSSFeed, Boolean, RSSFeed> {
 
     @Override
     protected RSSFeed doInBackground(RSSFeed... params) {
