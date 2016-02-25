@@ -18,6 +18,7 @@
     <RelativeLayout
         android:layout_width="27dp"
         android:layout_height="27dp"
+        android:layout_margin="5dp"
         android:layout_alignParentEnd="true"
         android:background="@drawable/layout_round_grid_icon"
         android:translationZ="1dp">

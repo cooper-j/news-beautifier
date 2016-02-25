@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.fragments.FeedListFragment;
+import com.github.newsbeautifier.fragments.FeedSelectFragment;
 import com.github.newsbeautifier.fragments.HomeFragment;
 import com.github.newsbeautifier.models.RSSFeed;
 
@@ -139,6 +140,8 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         if (position == 0){
             fragment = new HomeFragment();
         } else if (position == 1){
+            fragment = new FeedSelectFragment();
+        } else if (position == 2){
             fragment = new FeedListFragment();
         }
 

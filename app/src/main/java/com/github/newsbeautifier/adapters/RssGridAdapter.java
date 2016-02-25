@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSFeed;
+import com.github.newsbeautifier.models.User;
 
 import java.util.ArrayList;
 
@@ -22,12 +24,14 @@ import java.util.ArrayList;
 public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
 
     private Context mContext;
+    private User mUser;
     private ArrayList<RSSFeed> mRssList;
     private int mLayoutResourceId;
 
-    public RssGridAdapter(Context context, int layoutResourceId,  ArrayList<RSSFeed> rsssList){
+    public RssGridAdapter(Context context, int layoutResourceId,  ArrayList<RSSFeed> rsssList, User user){
         super(context, layoutResourceId, rsssList);
         mContext = context;
+        mUser = user;
         mLayoutResourceId = layoutResourceId;
         mRssList = rsssList;
     }
@@ -55,6 +59,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(mLayoutResourceId, parent, false);
+            holder.pos = position;
             holder.rssName = (TextView) convertView.findViewById(R.id.feedTitleTextView);
             holder.rssImage = (ImageView) convertView.findViewById(R.id.rssImage);
             holder.stateIcon = (ImageView) convertView.findViewById(R.id.stateIcon);
@@ -74,6 +79,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
     }
 
     private static class ViewHolder {
+        public int pos;
         public ImageView rssImage;
         public ImageView stateIcon;
         public View filter;
@@ -89,6 +95,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         @Override
         public void onClick(View v) {
             if (mViewHolder.stateIcon.getVisibility() == View.GONE) {
+                mUser.getFeeds().add(mRssList.get(mViewHolder.pos));
                 mViewHolder.stateIcon.setVisibility(View.VISIBLE);
                 AlphaAnimation fadeIn = new AlphaAnimation(1.0f, 0.0f);
                 fadeIn.setDuration(1000);
@@ -110,6 +117,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 });
                 mViewHolder.filter.startAnimation(fadeIn);
             } else {
+                mUser.getFeeds().remove(mRssList.get(mViewHolder.pos));
                 mViewHolder.stateIcon.setVisibility(View.GONE);
                 AlphaAnimation fadeOut = new AlphaAnimation(0.0f, 1.0f);
                 fadeOut.setDuration(1000);
