@@ -71,7 +71,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
 
         Glide.with(mContext).load(mRssList.get(position).getIcon()).into(holder.rssImage);
         holder.rssName.setText(mRssList.get(position).getTitle());
-        holder.stateIcon.setVisibility(View.GONE);
+        holder.stateIcon.setVisibility(mUser.getFeeds().contains(mRssList.get(position)) ? View.VISIBLE : View.GONE);
 
         convertView.setOnClickListener(new OnRssFeedClick(holder));
 
@@ -94,8 +94,9 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
 
         @Override
         public void onClick(View v) {
+            RSSFeed feed = mRssList.get(mViewHolder.pos);
             if (mViewHolder.stateIcon.getVisibility() == View.GONE) {
-                mUser.getFeeds().add(mRssList.get(mViewHolder.pos));
+                feed.setUserId(mUser.getId());
                 mViewHolder.stateIcon.setVisibility(View.VISIBLE);
                 AlphaAnimation fadeIn = new AlphaAnimation(1.0f, 0.0f);
                 fadeIn.setDuration(1000);
@@ -117,7 +118,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 });
                 mViewHolder.filter.startAnimation(fadeIn);
             } else {
-                mUser.getFeeds().remove(mRssList.get(mViewHolder.pos));
+                feed.setUserId(null);
                 mViewHolder.stateIcon.setVisibility(View.GONE);
                 AlphaAnimation fadeOut = new AlphaAnimation(0.0f, 1.0f);
                 fadeOut.setDuration(1000);
@@ -139,6 +140,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 });
                 mViewHolder.filter.startAnimation(fadeOut);
             }
+            feed.save();
         }
     }
 }

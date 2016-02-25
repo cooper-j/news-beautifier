@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
         newFeedList.add(RSSParser.RSS_FEEDS[0]);
         newFeedList.add(RSSParser.RSS_FEEDS[1]);
         newFeedList.add(RSSParser.RSS_FEEDS[2]);
+        newFeedList.add(RSSParser.RSS_FEEDS[3]);
 
         ((MyApplication)getActivity().getApplication()).mUser.setFeeds(newFeedList);
 
