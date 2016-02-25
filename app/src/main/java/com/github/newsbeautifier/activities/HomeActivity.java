@@ -1,5 +1,6 @@
-package com.github.newsbeautifier;
+package com.github.newsbeautifier.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,9 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.github.newsbeautifier.MyApplication;
+import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.fragments.FeedListFragment;
 import com.github.newsbeautifier.fragments.HomeFragment;
-import com.github.newsbeautifier.fragments.RSSFragment;
 import com.github.newsbeautifier.models.RSSFeed;
 
 public class HomeActivity extends AppCompatActivity implements FeedListFragment.OnMyFeedsChanged{
@@ -80,8 +82,8 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         });
     }
 
-    private void selectFeed(RSSFeed item) {
-        RSSFragment feedListFragment = new RSSFragment();
+    private void selectFeed(RSSFeed feed) {
+        /*RSSFragment feedListFragment = new RSSFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(RSSFragment.FEED, item);
         feedListFragment.setArguments(bundle);
@@ -94,6 +96,12 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, feedListFragment)
                 .commit();
+                */
+        if (feed.getItems().size() > 0) {
+            Intent intent = new Intent(this, ArticleActivity.class);
+            intent.putExtra(ArticleActivity.ARTICLE, feed.getItems().get(0));
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -114,7 +122,7 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
     @Override
     public void onMyFeedsChanged() {
-        mFeedAdapter.notifyDataSetChanged();
+            mFeedAdapter.notifyDataSetChanged();
     }
 
     private class HeaderItemClickListener implements ListView.OnItemClickListener {

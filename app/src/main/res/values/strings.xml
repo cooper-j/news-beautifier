@@ -18,4 +18,9 @@
         <item>@string/menu_feeds</item>
     </string-array>
 
+    <string name="title_activity_article">Article</string>
+    <string name="article_cover">Article cover</string>
+    <string name="send_to">Send to …</string>
+    <string name="article_pubDate">Posted on %1$s</string>
+    <string name="article_author">Written by %1$s</string>
 </resources>

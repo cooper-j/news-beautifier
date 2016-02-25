@@ -23,6 +23,7 @@ public class RSSItem extends BaseModel implements Parcelable{
     public static final String CONTENT_TAG = "content";
     public static final String LINK_TAG = "link";
     public static final String AUTHOR_TAG = "author";
+    public static final String CREATOR_TAG = "dc:creator";
     public static final String PUBDATE_TAG = "published";
     public static final String PUBDATE_TAG2 = "pubDate";
 
@@ -53,6 +54,9 @@ public class RSSItem extends BaseModel implements Parcelable{
     private String author = "";
 
     @Column
+    private String image = "";
+
+    @Column
     private String pubDate = "";
 
     public RSSItem() {
@@ -68,6 +72,7 @@ public class RSSItem extends BaseModel implements Parcelable{
         description = in.readString();
         link = in.readString();
         author = in.readString();
+        image = in.readString();
         pubDate = in.readString();
     }
 
@@ -155,6 +160,14 @@ public class RSSItem extends BaseModel implements Parcelable{
         feedLink = feedlink;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -170,6 +183,7 @@ public class RSSItem extends BaseModel implements Parcelable{
         dest.writeString(description);
         dest.writeString(link);
         dest.writeString(author);
+        dest.writeString(image);
         dest.writeString(pubDate);
     }
 }

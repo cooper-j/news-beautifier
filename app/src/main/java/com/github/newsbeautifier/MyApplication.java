@@ -35,7 +35,7 @@ public class MyApplication extends Application {
         addNewFeeds(feeds, Arrays.asList(RSSParser.RSS_FEEDS));
 
         for (RSSFeed feed : feeds){
-            new MyFeedUpdate().execute(feed);
+            new UpdateRSSFeedTask().execute(feed);
         }
     }
 
@@ -51,13 +51,6 @@ public class MyApplication extends Application {
             if (added){
                 feeds.add(tmp);
             }
-        }
-    }
-
-    private class MyFeedUpdate extends UpdateRSSFeedTask {
-        @Override
-        protected void onPostExecute(RSSFeed rssFeed) {
-            super.onPostExecute(rssFeed);
         }
     }
 }
