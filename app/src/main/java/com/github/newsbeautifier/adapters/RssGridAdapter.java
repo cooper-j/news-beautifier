@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.User;
@@ -59,7 +58,6 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(mLayoutResourceId, parent, false);
-            holder.pos = position;
             holder.rssName = (TextView) convertView.findViewById(R.id.feedTitleTextView);
             holder.rssImage = (ImageView) convertView.findViewById(R.id.rssImage);
             holder.stateIcon = (ImageView) convertView.findViewById(R.id.stateIcon);
@@ -69,12 +67,16 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        Glide.with(mContext).load(mRssList.get(position).getIcon()).into(holder.rssImage);
-        holder.rssName.setText(mRssList.get(position).getTitle());
-        holder.stateIcon.setVisibility(mUser.getFeeds().contains(mRssList.get(position)) ? View.VISIBLE : View.GONE);
-
         convertView.setOnClickListener(new OnRssFeedClick(holder));
+        if (mRssList.get(position) != null) {
+            holder.pos = position;
+            Glide.with(mContext).load(mRssList.get(position).getIcon()).into(holder.rssImage);
+            holder.rssName.setText(mRssList.get(position).getTitle());
+            holder.stateIcon.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.VISIBLE : View.GONE);
+            holder.filter.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.GONE : View.VISIBLE);
 
+            convertView.setOnClickListener(new OnRssFeedClick(holder));
+        }
         return convertView;
     }
 

@@ -13,7 +13,6 @@ import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.adapters.StaggeredRecyclerViewAdapter;
 import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.RSSItem;
-import com.github.newsbeautifier.utils.RSSParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +34,6 @@ public class HomeFragment extends Fragment {
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
-        List<RSSFeed> newFeedList = new ArrayList<>();
-        newFeedList.add(RSSParser.RSS_FEEDS[0]);
-        newFeedList.add(RSSParser.RSS_FEEDS[1]);
-        newFeedList.add(RSSParser.RSS_FEEDS[2]);
-        newFeedList.add(RSSParser.RSS_FEEDS[3]);
-
-        ((MyApplication)getActivity().getApplication()).mUser.setFeeds(newFeedList);
 
         List<RSSFeed> feedList = ((MyApplication)getActivity().getApplication()).mUser.getFeeds();
         List<RSSItem> articleList = new ArrayList<>();

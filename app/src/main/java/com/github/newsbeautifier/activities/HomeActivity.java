@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         mTitles = getResources().getStringArray(R.array.nav_items);

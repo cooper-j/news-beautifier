@@ -11,6 +11,7 @@ import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.adapters.RssGridAdapter;
 import com.github.newsbeautifier.models.RSSFeed;
+import com.github.newsbeautifier.models.User;
 import com.github.newsbeautifier.utils.RSSParser;
 import com.github.newsbeautifier.utils.UpdateRSSFeedTask;
 
@@ -32,12 +33,30 @@ public class FeedSelectFragment extends Fragment {
 
         mRssGrid = (GridView)inflatedView.findViewById(R.id.rssGridView);
 
-        new MyRSSParserTask().execute(RSSParser.RSS_FEEDS[0]);
-        new MyRSSParserTask().execute(RSSParser.RSS_FEEDS[1]);
-        new MyRSSParserTask().execute(RSSParser.RSS_FEEDS[2]);
-        new MyRSSParserTask().execute(RSSParser.RSS_FEEDS[3]);
+        User user = ((MyApplication)getActivity().getApplication()).mUser;
 
-        mRssGridAdapter = new RssGridAdapter(getActivity(), R.layout.grid_view_rss_tile, mRssList, ((MyApplication)getActivity().getApplication()).mUser);
+        mRssList.addAll(user.getFeeds());
+
+        ArrayList<RSSFeed> tmpList = new ArrayList<>();
+        tmpList.add(RSSParser.RSS_FEEDS[0]);
+        tmpList.add(RSSParser.RSS_FEEDS[1]);
+        tmpList.add(RSSParser.RSS_FEEDS[2]);
+        tmpList.add(RSSParser.RSS_FEEDS[3]);
+        boolean contained = false;
+        for (RSSFeed feed : tmpList) {
+            for (RSSFeed feed2 : mRssList)
+                if (feed2.getUrl().equals(feed.getUrl())) {
+                    contained = true;
+                    break;
+                }
+            if (!contained) {
+                mRssList.add(feed);
+                new MyRSSParserTask().execute(feed);
+            }
+            contained = false;
+        }
+
+        mRssGridAdapter = new RssGridAdapter(getActivity(), R.layout.grid_view_rss_tile, mRssList, user);
         mRssGrid.setAdapter(mRssGridAdapter);
 
         return inflatedView;
@@ -46,7 +65,6 @@ public class FeedSelectFragment extends Fragment {
     private class MyRSSParserTask extends UpdateRSSFeedTask {
         @Override
         protected void onPostExecute(RSSFeed rssFeed) {
-            mRssList.add(rssFeed);
             ((RssGridAdapter)mRssGrid.getAdapter()).notifyDataSetChanged();
             super.onPostExecute(rssFeed);
         }
