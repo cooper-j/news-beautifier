@@ -9,12 +9,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="menu_home">Home</string>
+    <string name="menu_feed_select">My feeds</string>
     <string name="menu_feeds">Feeds</string>
     <string name="drawer_feed_title">My feeds</string>
     <string name="action_search">Search</string>
 
     <string-array name="nav_items" translatable="false">
         <item>@string/menu_home</item>
+        <item>@string/menu_feed_select</item>
         <item>@string/menu_feeds</item>
     </string-array>
 

@@ -6,4 +6,8 @@
     <color name="drawer_subtitle_color">#89000000</color>
     <color name="drawer_default_item_color">#DD000000</color>
     <color name="background_header_color">#33000000</color>
+
+    <color name="tileLight">#00000000</color>
+    <color name="tileDark">#40000000</color>
+    <color name="tileDarkBorder">#50000000</color>
 </resources>
