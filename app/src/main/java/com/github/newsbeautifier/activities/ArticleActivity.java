@@ -8,16 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
-import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.RSSItem;
 import com.github.newsbeautifier.utils.URLImageParser;
-import com.github.newsbeautifier.utils.UpdateRSSFeedTask;
 
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -104,12 +103,13 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         return super.onCreateOptionsMenu(menu);
     }
 
-    private class FetchOneFeed extends UpdateRSSFeedTask{
-        @Override
-        protected void onPostExecute(RSSFeed rssFeed) {
-            super.onPostExecute(rssFeed);
-            mModel = rssFeed.getItems().get(0);
-            initViews();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
+

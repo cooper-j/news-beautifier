@@ -19,7 +19,8 @@ import java.net.URL;
  */
 public class RSSParser {
     public static final RSSFeed[] RSS_FEEDS = {
-            new RSSFeed("http://www.jeuxvideo.com/rss/rss-ps4.xml"),
+            new RSSFeed("http://com.clubic.feedsportal.com/c/33464/f/581988/index.rss"),
+            new RSSFeed("http://feeds.feedburner.com/Phonandroid"),
             new RSSFeed("https://news.google.fr/news?cf=all&hl=fr&pz=1&ned=fr&output=rss"),
             new RSSFeed("http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"),
             new RSSFeed("http://www.npr.org/rss/rss.php?id=1001")
