@@ -56,17 +56,10 @@
             android:contentDescription="@string/article_cover" />
 
         <TextView
-            android:id="@+id/article_description"
-
-            android:layout_marginBottom="10dp"
-            android:text="Concedentes opulentos resistere in digressi victu iuventutis quae robur in planitie adventu digressi abierat et omne sedibus recreati propinquabant conati sedibus sedibus adorti timor quae conati casu concedentes et in victu in sunt quiete postquam victu recreati concedentes casConcedentes opulentos resistere in digressi victu iuventutis quae robur in planitie adventu digressi abierat et omne sedibus recreati propinquabant conati sedibus sedibus adorti timor quae conati casu concedentes et in victu in sunt quiete postquam victu recreati concedentes casConcedentes opulentos resistere in digressi victu iuventutis quae robur in planitie adventu digressi abierat et omne sedibus recreati propinquabant conati sedibus sedibus adorti timor quae conati casu concedentes et in victu in sunt quiete postquam victu recreati concedentes cas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
             android:id="@+id/article_content"
 
             android:text="Concedentes opulentos resistere in digressi victu iuventutis quae robur in planitie adventu digressi abierat et omne sedibus recreati propinquabant conati sedibus sedibus adorti timor quae conati casu concedentes et in victu in sunt quiete postquam victu recreati concedentes casConcedentes opulentos resistere in digressi victu iuventutis quae robur in planitie adventu digressi abierat et omne sedibus recreati propinquabant conati sedibus sedibus adorti timor quae conati casu concedentes et in victu in sunt quiete postquam victu recreati concedentes casConcedentes opulentos resistere in digressi victu iuventutis quae robur in planitie adventu digressi abierat et omne sedibus recreati propinquabant conati sedibus sedibus adorti timor quae conati casu concedentes et in victu in sunt quiete postquam victu recreati concedentes cas"
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

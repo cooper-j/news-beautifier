@@ -16,12 +16,14 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 @Table(database = MyDatabase.class)
 public class RSSItem extends BaseModel implements Parcelable{
+    public static final String GUID_TAG = "guid";
     public static final String TITLE_TAG = "title";
     public static final String CATEGORY_TAG = "category";
     public static final String THUMBNAIL_TAG = "media:thumbnail";
+    public static final String ENCLOSURE_TAG = "enclosure";
     public static final String LANGUAGE_TAG = "language";
     public static final String DESCRIPTION_TAG = "description";
-    public static final String CONTENT_TAG = "content";
+    public static final String CONTENT_TAG = "content:encoded";
     public static final String LINK_TAG = "link";
     public static final String AUTHOR_TAG = "author";
     public static final String CREATOR_TAG = "dc:creator";
@@ -29,10 +31,13 @@ public class RSSItem extends BaseModel implements Parcelable{
     public static final String PUBDATE_TAG2 = "pubDate";
 
 
+    @PrimaryKey
+    @Column
+    private String guid = "";
+
     @Column
     private String feedLink;
 
-    @PrimaryKey
     @Column
     private String title = "";
 
@@ -40,13 +45,13 @@ public class RSSItem extends BaseModel implements Parcelable{
     private String category = "";
 
     @Column
-    private String content = "";
+    private String content = ""; // full content of the article
+
+    @Column
+    private String description = ""; // summary of the article
 
     @Column
     private String language = "";
-
-    @Column
-    private String description = "";
 
     @Column
     private String link = "";
@@ -65,6 +70,7 @@ public class RSSItem extends BaseModel implements Parcelable{
     }
 
     protected RSSItem(Parcel in) {
+        guid = in.readString();
         feedLink = in.readString();
         title = in.readString();
         category = in.readString();
@@ -88,6 +94,14 @@ public class RSSItem extends BaseModel implements Parcelable{
             return new RSSItem[size];
         }
     };
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
 
     public String getTitle() {
         return title;
@@ -127,6 +141,12 @@ public class RSSItem extends BaseModel implements Parcelable{
 
     public void setPubDate(String pPubdate) {
         pubDate = pPubdate;
+        if (pubDate != null && pubDate.contains("+")){
+            int idx = pubDate.lastIndexOf('+');
+            if (idx > 0){
+                pubDate = pubDate.substring(0, idx);
+            }
+        }
     }
 
     public String getDescription() {
@@ -176,6 +196,7 @@ public class RSSItem extends BaseModel implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(guid);
         dest.writeString(feedLink);
         dest.writeString(title);
         dest.writeString(category);

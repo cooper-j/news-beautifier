@@ -20,6 +20,8 @@ import java.net.URL;
 public class RSSParser {
     public static final RSSFeed[] RSS_FEEDS = {
             new RSSFeed("http://feeds.feedburner.com/Phonandroid"),
+            new RSSFeed("http://www.begeek.fr/feed"),
+            new RSSFeed("http://feeds.feedburner.com/ubergizmo_fr"),
             new RSSFeed("http://com.clubic.feedsportal.com/c/33464/f/581988/index.rss"),
             new RSSFeed("https://news.google.fr/news?cf=all&hl=fr&pz=1&ned=fr&output=rss"),
             new RSSFeed("http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"),
@@ -153,11 +155,15 @@ public class RSSParser {
             String name = parser.getName();
 
             switch (name) {
+                case RSSItem.GUID_TAG:
+                    item.setGuid(readText(parser));
+                    break;
                 case RSSItem.TITLE_TAG:
                     item.setTitle(readText(parser));
                     break;
                 case RSSItem.CONTENT_TAG:
                     item.setContent(readText(parser));
+                    break;
                 case RSSItem.DESCRIPTION_TAG:
                     item.setDescription(readText(parser));
                     break;
@@ -182,12 +188,27 @@ public class RSSParser {
                     break;
                 case RSSItem.THUMBNAIL_TAG:
                     item.setImage(readThumbNail(parser));
+                    break;
+                case RSSItem.ENCLOSURE_TAG:
+                    String enclosure = readEnclosure(parser);
+                    if (enclosure != null){
+                        item.setImage(enclosure);
+                    }
                 default:
                     skip(parser);
                     break;
             }
         }
         return item;
+    }
+
+    private String readEnclosure(XmlPullParser parser) {
+        String type = parser.getAttributeValue(null, "type");
+
+        if (type != null && type.contains("image/")){
+            return parser.getAttributeValue(null, "url");
+        }
+        return null;
     }
 
     private String readThumbNail(XmlPullParser parser) throws IOException, XmlPullParserException {

@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSItem;
 import com.github.newsbeautifier.utils.URLImageGetterParser;
-import com.github.newsbeautifier.utils.XmlImgParser;
 
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,7 +46,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         TextView author = (TextView) findViewById(R.id.article_published_author);
         TextView pubDate = (TextView) findViewById(R.id.article_published_date);
         TextView content = (TextView) findViewById(R.id.article_content);
-        TextView description = (TextView) findViewById(R.id.article_description);
         TextView link = (TextView) findViewById(R.id.article_link);
 
         cover = (ImageView) findViewById(R.id.article_cover);
@@ -71,29 +69,11 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
 
-        new XmlImgParser(new XmlImgParser.OnPostExecuteListener() {
-            @Override
-            public void onPostExecute(String url) {
-                loadImageView(cover, url);
-            }
-        }).execute(mModel.getContent());
-
-        new XmlImgParser(new XmlImgParser.OnPostExecuteListener() {
-            @Override
-            public void onPostExecute(String url) {
-                loadImageView(image, url);
-            }
-        }).execute(mModel.getDescription());
-
-        // set content
+         // set content
         URLImageGetterParser p = new URLImageGetterParser(content, this);
 
-        Spanned contentSpan = Html.fromHtml(mModel.getContent(), p, null);
+        Spanned contentSpan = Html.fromHtml(mModel.getContent().isEmpty() ? mModel.getDescription() : mModel.getContent(), p, null);
         content.setText(contentSpan);
-
-        p = new URLImageGetterParser(description, this);
-        Spanned descriptionSpan = Html.fromHtml(mModel.getDescription(), p, null);
-        description.setText(descriptionSpan);
 
         if (!mModel.getImage().isEmpty()) {
             Glide
@@ -109,17 +89,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                     .into(image);
         } else {
             image.setVisibility(View.GONE);
-        }
-    }
-
-    private void loadImageView(ImageView imageView, String url) {
-        if (url != null) {
-            Glide
-                    .with(this)
-                    .load(url)
-                    .centerCrop()
-                    .crossFade()
-                    .into(imageView);
         }
     }
 
