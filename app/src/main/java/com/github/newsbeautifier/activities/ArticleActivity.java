@@ -1,7 +1,6 @@
 package com.github.newsbeautifier.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +16,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSItem;
-import com.github.newsbeautifier.utils.URLImageParser;
+import com.github.newsbeautifier.utils.URLImageGetterParser;
+import com.github.newsbeautifier.utils.XmlImgParser;
 
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static String ARTICLE = "ARTICLE";
 
     private RSSItem mModel;
+    private ImageView cover;
+    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         TextView description = (TextView) findViewById(R.id.article_description);
         TextView link = (TextView) findViewById(R.id.article_link);
 
-        ImageView cover = (ImageView) findViewById(R.id.article_cover);
-        ImageView image = (ImageView) findViewById(R.id.article_image);
+        cover = (ImageView) findViewById(R.id.article_cover);
+        image = (ImageView) findViewById(R.id.article_image);
 
         title.setText(Html.fromHtml(mModel.getTitle() != null ? mModel.getTitle() : ""));
         author.setText(getString(R.string.article_author, mModel.getAuthor()));
@@ -60,17 +62,36 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getLink()));
-                    startActivity(browserIntent);
+                    Intent intent = new Intent(ArticleActivity.this, WebViewActivity.class);
+                    intent.putExtra(WebViewActivity.TITLE, mModel.getTitle());
+                    intent.putExtra(WebViewActivity.URL, mModel.getLink());
+
+                    startActivity(intent);
                 }
             });
         }
+
+        new XmlImgParser(new XmlImgParser.OnPostExecuteListener() {
+            @Override
+            public void onPostExecute(String url) {
+                loadImageView(cover, url);
+            }
+        }).execute(mModel.getContent());
+
+        new XmlImgParser(new XmlImgParser.OnPostExecuteListener() {
+            @Override
+            public void onPostExecute(String url) {
+                loadImageView(image, url);
+            }
+        }).execute(mModel.getDescription());
+
         // set content
-        URLImageParser p = new URLImageParser(content, this);
+        URLImageGetterParser p = new URLImageGetterParser(content, this);
+
         Spanned contentSpan = Html.fromHtml(mModel.getContent(), p, null);
         content.setText(contentSpan);
 
-        p = new URLImageParser(description, this);
+        p = new URLImageGetterParser(description, this);
         Spanned descriptionSpan = Html.fromHtml(mModel.getDescription(), p, null);
         description.setText(descriptionSpan);
 
@@ -79,14 +100,26 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                     .with(this)
                     .load(mModel.getImage())
                     .centerCrop()
-                    .crossFade()
                     .into(cover);
             Glide
                     .with(this)
                     .load(mModel.getImage())
+                    .asBitmap()
+                    .centerCrop()
+                    .into(image);
+        } else {
+            image.setVisibility(View.GONE);
+        }
+    }
+
+    private void loadImageView(ImageView imageView, String url) {
+        if (url != null) {
+            Glide
+                    .with(this)
+                    .load(url)
                     .centerCrop()
                     .crossFade()
-                    .into(image);
+                    .into(imageView);
         }
     }
 

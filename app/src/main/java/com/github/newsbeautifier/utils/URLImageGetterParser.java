@@ -17,11 +17,11 @@ import java.net.URL;
  * * NewsBeautifier
  * Created by jerem_000 on 2/24/2016.
  */
-public class URLImageParser implements Html.ImageGetter {
+public class URLImageGetterParser implements Html.ImageGetter {
     Context c;
     View container;
 
-    public URLImageParser(View t, Context c) {
+    public URLImageGetterParser(View t, Context c) {
         this.c = c;
         this.container = t;
     }
@@ -56,7 +56,7 @@ public class URLImageParser implements Html.ImageGetter {
         @Override
         protected void onPostExecute(Drawable result) {
             // set the correct bound according to the result from HTTP call
-            if (urlDrawable != null) {
+            if (urlDrawable != null && result != null) {
                 urlDrawable.setBounds(0, 0, result.getIntrinsicWidth(), result.getIntrinsicHeight());
                 // change the reference of the current drawable to the result
                 // from the HTTP call
@@ -64,7 +64,7 @@ public class URLImageParser implements Html.ImageGetter {
 
                 // redraw the image by invalidating the container
             }
-            URLImageParser.this.container.invalidate();
+            URLImageGetterParser.this.container.invalidate();
         }
 
         public Drawable fetchDrawable(String urlString) {
