@@ -29,4 +29,5 @@
     <string name="home_activity">Home</string>
     <string name="article_continue_to_read"><![CDATA[Continue to read >]]></string>
     <string name="title_activity_web_view">Article</string>
+    <string name="logo">logo</string>
 </resources>

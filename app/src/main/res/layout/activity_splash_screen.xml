@@ -9,17 +9,19 @@
     android:gravity="center"
     tools:context="com.github.newsbeautifier.activities.SplashScreenActivity">
 
-    <TextView
-        android:text="SPLASH"
+    <ImageView
+        android:src="@drawable/logo"
         android:layout_marginBottom="20dp"
+        android:scaleType="centerCrop"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/logo" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
 
         android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/progress_bar_indeterminate"
+        android:indeterminateDrawable="@drawable/progress_bar_coloraccent"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:minHeight="4dp"
