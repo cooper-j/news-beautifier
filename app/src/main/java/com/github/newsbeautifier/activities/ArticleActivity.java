@@ -53,7 +53,11 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         ImageView image = (ImageView) findViewById(R.id.article_image);
 
         title.setText(Html.fromHtml(mModel.getTitle() != null ? mModel.getTitle() : ""));
-        author.setText(getString(R.string.article_author, mModel.getAuthor()));
+        if (!mModel.getAuthor().isEmpty()) {
+            author.setText(getString(R.string.article_author, mModel.getAuthor()));
+        } else {
+            author.setVisibility(View.GONE);
+        }
         pubDate.setText(getString(R.string.article_pubDate, mModel.getPubDate()));
         if (mModel.getLink().isEmpty()){
             link.setVisibility(View.GONE);
@@ -137,10 +141,24 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         for (int j = 0; j < imgs.size(); j++) {
             Element img = imgs.get(j);
             if (img.hasAttr("src")) {
-                return img.attr("src");
+                String ext = img.attr("src");
+                if (hasAImgExtension(ext)){
+                    return ext;
+                }
             }
         }
         return null;
+    }
+
+    private boolean hasAImgExtension(String fileName){
+        String[] ext = new String[]{"png", "bmp", "jpg", "jpeg"};
+
+        for (String e : ext){
+            if (fileName.endsWith(e) || fileName.endsWith(e.toUpperCase())){
+                return true;
+            }
+        }
+        return false;
     }
 }
 

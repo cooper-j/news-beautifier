@@ -41,7 +41,6 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         mHeaderList = (ListView) mNavigationView.getHeaderView(0).findViewById(R.id.left_drawer);
         mFeedListView = (ListView) findViewById(R.id.feed_list_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -55,11 +54,35 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
         mHeaderList.setOnItemClickListener(new HeaderItemClickListener());
 
+        ((ListView)findViewById(R.id.settings_list_view)).setOnItemClickListener(settingsItemClickListener);
         boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
         if (tabletSize) {
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         }
         initMyFeeds();
+    }
+
+    private AdapterView.OnItemClickListener settingsItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0){
+                sendFeedBack();
+            } else if (position == 1){
+                startAboutActivity();
+            }
+        }
+    };
+
+    private void startAboutActivity() {
+        startActivity(new Intent(this, AboutActivity.class));
+    }
+
+    private void sendFeedBack() {
+        Intent Email = new Intent(Intent.ACTION_SEND);
+        Email.setType("text/email");
+        Email.putExtra(Intent.EXTRA_EMAIL, getResources().getStringArray(R.array.email_contacts));
+        Email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_email_title));
+        startActivity(Intent.createChooser(Email, getString(R.string.feedback_send_title)));
     }
 
     private void initMyFeeds() {

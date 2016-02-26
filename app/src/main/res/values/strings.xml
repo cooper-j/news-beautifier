@@ -1,33 +1,52 @@
 <resources>
     <string name="app_name">NewsBeautifier</string>
+    <string name="logo">logo</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <!-- drawer items -->
     <string name="menu_home">Home</string>
     <string name="menu_feed_select">My feeds</string>
     <string name="menu_feeds">Feeds</string>
     <string name="drawer_feed_title">My feeds</string>
     <string name="action_search">Search</string>
 
+    <!-- string arrays -->
     <string-array name="nav_items" translatable="false">
         <item>@string/menu_home</item>
         <item>@string/menu_feed_select</item>
         <item>@string/menu_feeds</item>
     </string-array>
 
+    <string-array name="email_contacts">
+        <item>colinjeremie9@gmail.com</item>
+        <item>james.cooper@epitech.eu</item>
+    </string-array>
+
+    <string-array name="settings_array">
+        <item>Send feedback</item>
+        <item>About</item>
+    </string-array>
+
+    <!-- Titles -->
+    <string name="title_home_activity">Home</string>
     <string name="title_activity_article">Article</string>
+    <string name="title_activity_about">About</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="title_activity_web_view">Article</string>
+
+    <!-- Article's strings -->
     <string name="article_cover">Article cover</string>
     <string name="send_to">Send to …</string>
     <string name="article_pubDate">Posted on %1$s</string>
     <string name="article_author">Written by %1$s</string>
-    <string name="title_activity_splash_screen">SplashScreenActivity</string>
-    <string name="home_activity">Home</string>
-    <string name="article_continue_to_read"><![CDATA[Continue to read >]]></string>
-    <string name="title_activity_web_view">Article</string>
-    <string name="logo">logo</string>
+    <string name="article_continue_to_read"><b>Read more</b></string>
+
+    <!-- About and feedback sections -->
+    <string name="feedback_send_title">Send Feedback:</string>
+    <string name="feedback_email_title">Feedback</string>
+    <string name="about_version">Version</string>
 </resources>

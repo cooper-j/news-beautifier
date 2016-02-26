@@ -25,7 +25,7 @@
             android:layout_marginTop="@dimen/nav_header_height"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <TextView
                 style="@style/drawer_subtitle"
                 android:padding="16dp"
@@ -36,7 +36,16 @@
                 style="?android:attr/listViewStyle"
 
                 android:id="@+id/feed_list_view"
+                android:layout_weight="1"
                 android:divider="@null"
+                android:choiceMode="singleChoice"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+            <ListView
+                style="?android:attr/listViewStyle"
+
+                android:id="@+id/settings_list_view"
+                android:entries="@array/settings_array"
                 android:choiceMode="singleChoice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

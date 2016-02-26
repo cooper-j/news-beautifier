@@ -23,8 +23,8 @@
         </activity>
         <activity
             android:name=".activities.HomeActivity"
-            android:label="@string/home_activity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_home_activity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ArticleActivity"
             android:label="@string/title_activity_article"
@@ -32,6 +32,10 @@
         <activity
             android:name=".activities.WebViewActivity"
             android:label="@string/title_activity_web_view"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/title_activity_about"
             android:theme="@style/AppTheme"/>
     </application>
 
