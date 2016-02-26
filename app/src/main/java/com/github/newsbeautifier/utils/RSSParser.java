@@ -21,6 +21,7 @@ public class RSSParser {
     public static final RSSFeed[] RSS_FEEDS = {
             new RSSFeed("http://feeds.feedburner.com/Phonandroid"),
             new RSSFeed("http://www.begeek.fr/feed"),
+            new RSSFeed("http://feeds2.feedburner.com/LeJournalduGeek"),
             new RSSFeed("http://feeds.feedburner.com/ubergizmo_fr"),
             new RSSFeed("http://com.clubic.feedsportal.com/c/33464/f/581988/index.rss"),
             new RSSFeed("https://news.google.fr/news?cf=all&hl=fr&pz=1&ned=fr&output=rss"),

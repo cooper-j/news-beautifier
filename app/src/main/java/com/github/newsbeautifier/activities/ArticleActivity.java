@@ -6,7 +6,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,15 +15,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSItem;
-import com.github.newsbeautifier.utils.URLImageGetterParser;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static String ARTICLE = "ARTICLE";
 
     private RSSItem mModel;
-    private ImageView cover;
-    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         TextView content = (TextView) findViewById(R.id.article_content);
         TextView link = (TextView) findViewById(R.id.article_link);
 
-        cover = (ImageView) findViewById(R.id.article_cover);
-        image = (ImageView) findViewById(R.id.article_image);
+        ImageView cover = (ImageView) findViewById(R.id.article_cover);
+        ImageView image = (ImageView) findViewById(R.id.article_image);
 
         title.setText(Html.fromHtml(mModel.getTitle() != null ? mModel.getTitle() : ""));
         author.setText(getString(R.string.article_author, mModel.getAuthor()));
@@ -69,21 +70,24 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             });
         }
 
-         // set content
-        URLImageGetterParser p = new URLImageGetterParser(content, this);
+        String text = Jsoup.parse(mModel.getContent().isEmpty() ? mModel.getDescription() : mModel.getContent()).text();
+        content.setText(text);
 
-        Spanned contentSpan = Html.fromHtml(mModel.getContent().isEmpty() ? mModel.getDescription() : mModel.getContent(), p, null);
-        content.setText(contentSpan);
+        String urlImgDescription = getUrlImgDescription();
+        String urlImage = mModel.getImage();
 
-        if (!mModel.getImage().isEmpty()) {
+        if (urlImage.isEmpty()){
+            urlImage = urlImgDescription;
+        }
+        if (urlImage != null) {
             Glide
                     .with(this)
-                    .load(mModel.getImage())
+                    .load(urlImage)
                     .centerCrop()
                     .into(cover);
             Glide
                     .with(this)
-                    .load(mModel.getImage())
+                    .load(urlImage)
                     .asBitmap()
                     .centerCrop()
                     .into(image);
@@ -125,6 +129,18 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getUrlImgDescription(){
+        Document doc = Jsoup.parse(mModel.getDescription());
+        Elements imgs = doc.select("img");
+        for (int j = 0; j < imgs.size(); j++) {
+            Element img = imgs.get(j);
+            if (img.hasAttr("src")) {
+                return img.attr("src");
+            }
+        }
+        return null;
     }
 }
 
