@@ -48,7 +48,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         TextView link = (TextView) findViewById(R.id.article_link);
 
         ImageView cover = (ImageView) findViewById(R.id.article_cover);
-        ImageView image = (ImageView) findViewById(R.id.article_image);
 
         title.setText(Html.fromHtml(mModel.getTitle() != null ? mModel.getTitle() : ""));
         if (!mModel.getAuthor().isEmpty()) {
@@ -87,14 +86,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                     .load(urlImage)
                     .centerCrop()
                     .into(cover);
-            Glide
-                    .with(this)
-                    .load(urlImage)
-                    .asBitmap()
-                    .centerCrop()
-                    .into(image);
-        } else {
-            image.setVisibility(View.GONE);
         }
     }
 

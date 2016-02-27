@@ -7,13 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.adapters.RssGridAdapter;
 import com.github.newsbeautifier.models.RSSFeed;
-import com.github.newsbeautifier.models.User;
-import com.github.newsbeautifier.utils.RSSParser;
-import com.github.newsbeautifier.utils.UpdateRSSFeedTask;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.ArrayList;
@@ -35,12 +31,10 @@ public class FeedSelectFragment extends Fragment {
 
         mRssGrid = (GridView)inflatedView.findViewById(R.id.rssGridView);
 
-        User user = ((MyApplication)getActivity().getApplication()).mUser;
-
         mRssList = new Select()
                 .from(RSSFeed.class).queryList();
 
-        mRssGridAdapter = new RssGridAdapter(getActivity(), R.layout.grid_view_rss_tile, mRssList, user);
+        mRssGridAdapter = new RssGridAdapter(getActivity(), R.layout.grid_view_rss_tile, mRssList);
         mRssGrid.setAdapter(mRssGridAdapter);
 
         return inflatedView;

@@ -1,5 +1,6 @@
 package com.github.newsbeautifier.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
+import com.github.newsbeautifier.fragments.FeedListFragment;
 import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.User;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,15 +25,16 @@ import java.util.List;
  */
 public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
 
-    private Context mContext;
     private User mUser;
+    private Activity mActivity;
     private List<RSSFeed> mRssList;
     private int mLayoutResourceId;
 
-    public RssGridAdapter(Context context, int layoutResourceId,  List<RSSFeed> rssList, User user){
-        super(context, layoutResourceId, rssList);
-        mContext = context;
-        mUser = user;
+    public RssGridAdapter(Activity activity, int layoutResourceId, List<RSSFeed> rssList){
+        super(activity, layoutResourceId, rssList);
+
+        mActivity = activity;
+        mUser = ((MyApplication)mActivity.getApplication()).mUser;
         mLayoutResourceId = layoutResourceId;
         mRssList = rssList;
     }
@@ -57,7 +59,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) mContext
+            LayoutInflater inflater = (LayoutInflater) mActivity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(mLayoutResourceId, parent, false);
             holder.rssName = (TextView) convertView.findViewById(R.id.feedTitleTextView);
@@ -72,7 +74,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         convertView.setOnClickListener(new OnRssFeedClick(holder));
         if (mRssList.get(position) != null) {
             holder.pos = position;
-            Glide.with(mContext).load(mRssList.get(position).getImage()).into(holder.rssImage);
+            Glide.with(mActivity).load(mRssList.get(position).getImage()).into(holder.rssImage);
             holder.rssName.setText(mRssList.get(position).getTitle());
             holder.stateIcon.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.VISIBLE : View.GONE);
             holder.filter.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.GONE : View.VISIBLE);
@@ -100,8 +102,9 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         public void onClick(View v) {
             RSSFeed feed = mRssList.get(mViewHolder.pos);
             if (mViewHolder.stateIcon.getVisibility() == View.GONE) {
+                mUser.addFeed(feed);
                 feed.setUserId(mUser.getId());
-                mUser.getFeeds().add(feed);
+
                 mViewHolder.stateIcon.setVisibility(View.VISIBLE);
                 AlphaAnimation fadeIn = new AlphaAnimation(1.0f, 0.0f);
                 fadeIn.setDuration(1000);
@@ -124,12 +127,8 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 mViewHolder.filter.startAnimation(fadeIn);
             } else {
                 feed.setUserId(null);
-                List<RSSFeed> tmpFeeds = mUser.getFeeds();
-                for (int i = 0; i < tmpFeeds.size(); ++i)
-                    if (feed.getUrl().equals(tmpFeeds.get(i).getUrl())) {
-                        mUser.getFeeds().remove(feed);
-                        break;
-                    }
+                mUser.removeFeed(feed);
+
                 mViewHolder.stateIcon.setVisibility(View.GONE);
                 AlphaAnimation fadeOut = new AlphaAnimation(0.0f, 1.0f);
                 fadeOut.setDuration(1000);
@@ -152,6 +151,12 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 mViewHolder.filter.startAnimation(fadeOut);
             }
             feed.update();
+
+            try {
+                ((FeedListFragment.OnMyFeedsChanged)mActivity).onMyFeedsChanged();
+            } catch (ClassCastException e){
+                e.printStackTrace();
+            }
         }
     }
 }
