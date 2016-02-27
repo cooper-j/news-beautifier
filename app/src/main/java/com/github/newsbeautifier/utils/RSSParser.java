@@ -19,6 +19,7 @@ import java.net.URL;
  */
 public class RSSParser {
     public static final RSSFeed[] RSS_FEEDS = {
+            new RSSFeed("http://www.legorafi.fr/feed/"),
             new RSSFeed("http://feeds.feedburner.com/Phonandroid"),
             new RSSFeed("http://www.begeek.fr/feed"),
             new RSSFeed("http://feeds2.feedburner.com/LeJournalduGeek"),
@@ -187,8 +188,13 @@ public class RSSParser {
                 case RSSItem.PUBDATE_TAG2:
                     item.setPubDate(readText(parser));
                     break;
+                case RSSItem.MEDIA_THUMBNAIL_TAG:
+                    item.setImage(readMediaThumbNail(parser));
+                    break;
                 case RSSItem.THUMBNAIL_TAG:
-                    item.setImage(readThumbNail(parser));
+                case RSSItem.MEDIUM_THUMBNAIL_TAG:
+                case RSSItem.LARGE_THUMBNAIL_TAG:
+                    item.setImage(readText(parser));
                     break;
                 case RSSItem.ENCLOSURE_TAG:
                     String enclosure = readEnclosure(parser);
@@ -212,7 +218,7 @@ public class RSSParser {
         return null;
     }
 
-    private String readThumbNail(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private String readMediaThumbNail(XmlPullParser parser) throws IOException, XmlPullParserException {
         return parser.getAttributeValue(null, "url");
     }
 

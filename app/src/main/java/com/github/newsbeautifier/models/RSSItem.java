@@ -19,7 +19,10 @@ public class RSSItem extends BaseModel implements Parcelable{
     public static final String GUID_TAG = "guid";
     public static final String TITLE_TAG = "title";
     public static final String CATEGORY_TAG = "category";
-    public static final String THUMBNAIL_TAG = "media:thumbnail";
+    public static final String MEDIA_THUMBNAIL_TAG = "media:thumbnail";
+    public static final String THUMBNAIL_TAG = "thumbnail";
+    public static final String MEDIUM_THUMBNAIL_TAG = "mediumthumbnail";
+    public static final String LARGE_THUMBNAIL_TAG = "largethumbnail";
     public static final String ENCLOSURE_TAG = "enclosure";
     public static final String LANGUAGE_TAG = "language";
     public static final String DESCRIPTION_TAG = "description";
