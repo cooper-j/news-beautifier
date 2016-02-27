@@ -2,6 +2,7 @@ package com.github.newsbeautifier.models;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,5 +38,28 @@ public class User {
 
     public void setFeeds(List<RSSFeed> pFeeds) {
         feeds = pFeeds;
+    }
+
+    public void addFeed(RSSFeed feed) {
+        boolean allow = true;
+
+        for (RSSFeed tmp : feeds){
+            if (tmp.getUrl().equals(feed.getUrl())){
+                allow = false;
+                break;
+            }
+        }
+        if (allow){
+            feeds.add(feed);
+        }
+    }
+
+    public void removeFeed(RSSFeed feed) {
+        for (Iterator<RSSFeed> it = feeds.iterator(); it.hasNext();) {
+            if (it.next().getUrl().equals(feed.getUrl())) {
+                it.remove();
+                break;
+            }
+        }
     }
 }

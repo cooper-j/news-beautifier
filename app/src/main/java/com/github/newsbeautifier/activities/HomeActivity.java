@@ -162,8 +162,6 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
             fragment = new HomeFragment();
         } else if (position == 1){
             fragment = new FeedSelectFragment();
-        } else if (position == 2){
-            fragment = new FeedListFragment();
         }
 
         // Insert the fragment by replacing any existing fragment
