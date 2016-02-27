@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.activities.ArticleActivity;
 import com.github.newsbeautifier.models.RSSItem;
@@ -42,7 +43,9 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
     public void onBindViewHolder(StaggeredViewHolder holder, int position) {
         holder.article = itemList.get(position);
         holder.articleTitle.setText(itemList.get(position).getTitle());
-        Glide.with(mActivity).load(itemList.get(position).getImage()).into(holder.articlePhoto);
+        Glide.with(mActivity).load(itemList.get(position).getImage())
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(holder.articlePhoto);
     }
 
     @Override

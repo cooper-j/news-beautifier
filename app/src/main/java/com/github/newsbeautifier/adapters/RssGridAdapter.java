@@ -99,9 +99,19 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         @Override
         public void onClick(View v) {
             RSSFeed feed = mRssList.get(mViewHolder.pos);
+            List<RSSFeed> tmpFeeds = mUser.getFeeds();
             if (mViewHolder.stateIcon.getVisibility() == View.GONE) {
-                feed.setUserId(mUser.getId());
-                mUser.getFeeds().add(feed);
+
+                boolean contains = false;
+                for (int i = 0; i < tmpFeeds.size(); ++i)
+                    if (feed.getUrl().equals(tmpFeeds.get(i).getUrl())) {
+                        contains = true;
+                        break;
+                    }
+                if (!contains) {
+                    feed.setUserId(mUser.getId());
+                    mUser.getFeeds().add(feed);
+                }
                 mViewHolder.stateIcon.setVisibility(View.VISIBLE);
                 AlphaAnimation fadeIn = new AlphaAnimation(1.0f, 0.0f);
                 fadeIn.setDuration(1000);
@@ -124,7 +134,6 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 mViewHolder.filter.startAnimation(fadeIn);
             } else {
                 feed.setUserId(null);
-                List<RSSFeed> tmpFeeds = mUser.getFeeds();
                 for (int i = 0; i < tmpFeeds.size(); ++i)
                     if (feed.getUrl().equals(tmpFeeds.get(i).getUrl())) {
                         mUser.getFeeds().remove(feed);
