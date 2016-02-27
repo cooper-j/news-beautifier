@@ -2,6 +2,7 @@ package com.github.newsbeautifier.adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
+import com.github.newsbeautifier.activities.ArticleActivity;
 import com.github.newsbeautifier.models.RSSItem;
 
 import java.util.List;
@@ -32,11 +34,13 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.staggered_list_item, null);
         StaggeredViewHolder rcv = new StaggeredViewHolder(layoutView);
+
         return rcv;
     }
 
     @Override
     public void onBindViewHolder(StaggeredViewHolder holder, int position) {
+        holder.article = itemList.get(position);
         holder.articleTitle.setText(itemList.get(position).getTitle());
         Glide.with(mContext).load(itemList.get(position).getImage()).into(holder.articlePhoto);
     }

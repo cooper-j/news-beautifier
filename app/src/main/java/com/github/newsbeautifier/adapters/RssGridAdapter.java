@@ -70,7 +70,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         convertView.setOnClickListener(new OnRssFeedClick(holder));
         if (mRssList.get(position) != null) {
             holder.pos = position;
-            Glide.with(mContext).load(mRssList.get(position).getIcon()).into(holder.rssImage);
+            Glide.with(mContext).load(mRssList.get(position).getImage()).into(holder.rssImage);
             holder.rssName.setText(mRssList.get(position).getTitle());
             holder.stateIcon.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.VISIBLE : View.GONE);
             holder.filter.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.GONE : View.VISIBLE);

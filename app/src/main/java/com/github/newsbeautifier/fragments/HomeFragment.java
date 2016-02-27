@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
 
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         List<RSSFeed> feedList = ((MyApplication)getActivity().getApplication()).mUser.getFeeds();

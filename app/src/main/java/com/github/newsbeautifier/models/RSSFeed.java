@@ -79,6 +79,13 @@ public class RSSFeed extends BaseModel implements Parcelable{
         this.url = url;
     }
 
+
+
+    public RSSFeed(String url, String icon) {
+        this.url = url;
+        this.icon = icon;
+    }
+
     protected RSSFeed(Parcel in) {
         link = in.readString();
         url = in.readString();
