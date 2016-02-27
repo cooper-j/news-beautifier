@@ -101,6 +101,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
             RSSFeed feed = mRssList.get(mViewHolder.pos);
             if (mViewHolder.stateIcon.getVisibility() == View.GONE) {
                 feed.setUserId(mUser.getId());
+                mUser.getFeeds().add(feed);
                 mViewHolder.stateIcon.setVisibility(View.VISIBLE);
                 AlphaAnimation fadeIn = new AlphaAnimation(1.0f, 0.0f);
                 fadeIn.setDuration(1000);
@@ -123,6 +124,12 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 mViewHolder.filter.startAnimation(fadeIn);
             } else {
                 feed.setUserId(null);
+                List<RSSFeed> tmpFeeds = mUser.getFeeds();
+                for (int i = 0; i < tmpFeeds.size(); ++i)
+                    if (feed.getUrl().equals(tmpFeeds.get(i).getUrl())) {
+                        mUser.getFeeds().remove(feed);
+                        break;
+                    }
                 mViewHolder.stateIcon.setVisibility(View.GONE);
                 AlphaAnimation fadeOut = new AlphaAnimation(0.0f, 1.0f);
                 fadeOut.setDuration(1000);
