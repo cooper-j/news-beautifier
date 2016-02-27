@@ -1,7 +1,10 @@
 package com.github.newsbeautifier.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +13,7 @@ import android.widget.Toast;
 
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.activities.ArticleActivity;
+import com.github.newsbeautifier.activities.HomeActivity;
 import com.github.newsbeautifier.models.RSSItem;
 
 /**
@@ -17,12 +21,15 @@ import com.github.newsbeautifier.models.RSSItem;
  */
 public class StaggeredViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    private Activity mActivity;
+
     public RSSItem article;
     public TextView articleTitle;
     public ImageView articlePhoto;
 
-    public StaggeredViewHolder(View itemView) {
+    public StaggeredViewHolder(View itemView, Activity activity) {
         super(itemView);
+        mActivity = activity;
         itemView.setOnClickListener(this);
         articleTitle = (TextView) itemView.findViewById(R.id.article_title);
         articlePhoto = (ImageView) itemView.findViewById(R.id.article_photo);
@@ -33,6 +40,13 @@ public class StaggeredViewHolder  extends RecyclerView.ViewHolder implements Vie
         Context context = view.getContext();
         Intent intent = new Intent(context, ArticleActivity.class);
         intent.putExtra(ArticleActivity.ARTICLE, article);
-        context.startActivity(intent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(mActivity, articlePhoto, "article_image");
+
+            context.startActivity(intent, options.toBundle());
+        } else
+            context.startActivity(intent);
     }
 }

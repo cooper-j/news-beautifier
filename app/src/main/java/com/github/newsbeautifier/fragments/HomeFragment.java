@@ -1,5 +1,6 @@
 package com.github.newsbeautifier.fragments;
 
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -41,8 +42,8 @@ public class HomeFragment extends Fragment {
         for (int i = 0; i < feedList.size(); ++i)
             articleList.addAll(feedList.get(i).getItems());
 
-
         StaggeredRecyclerViewAdapter rcAdapter = new StaggeredRecyclerViewAdapter(getActivity(), articleList);
+
         recyclerView.setAdapter(rcAdapter);
 
         return v;

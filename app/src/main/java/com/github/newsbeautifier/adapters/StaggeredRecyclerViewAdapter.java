@@ -1,6 +1,7 @@
 package com.github.newsbeautifier.adapters;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -22,19 +23,18 @@ import java.util.List;
 public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<StaggeredViewHolder> {
 
     private List<RSSItem> itemList;
-    private Context mContext;
+    private Activity mActivity;
 
-    public StaggeredRecyclerViewAdapter(Context context, List<RSSItem> itemList) {
+    public StaggeredRecyclerViewAdapter(Activity activity, List<RSSItem> itemList) {
         this.itemList = itemList;
-        this.mContext = context;
+        this.mActivity = activity;
     }
 
     @Override
     public StaggeredViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.staggered_list_item, null);
-        StaggeredViewHolder rcv = new StaggeredViewHolder(layoutView);
-
+        StaggeredViewHolder rcv = new StaggeredViewHolder(layoutView, mActivity);
         return rcv;
     }
 
@@ -42,7 +42,7 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
     public void onBindViewHolder(StaggeredViewHolder holder, int position) {
         holder.article = itemList.get(position);
         holder.articleTitle.setText(itemList.get(position).getTitle());
-        Glide.with(mContext).load(itemList.get(position).getImage()).into(holder.articlePhoto);
+        Glide.with(mActivity).load(itemList.get(position).getImage()).into(holder.articlePhoto);
     }
 
     @Override
