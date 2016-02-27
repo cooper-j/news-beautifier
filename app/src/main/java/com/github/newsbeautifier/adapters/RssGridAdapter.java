@@ -14,8 +14,10 @@ import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.User;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by james_000 on 2/16/2016.
@@ -24,15 +26,15 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
 
     private Context mContext;
     private User mUser;
-    private ArrayList<RSSFeed> mRssList;
+    private List<RSSFeed> mRssList;
     private int mLayoutResourceId;
 
-    public RssGridAdapter(Context context, int layoutResourceId,  ArrayList<RSSFeed> rsssList, User user){
-        super(context, layoutResourceId, rsssList);
+    public RssGridAdapter(Context context, int layoutResourceId,  List<RSSFeed> rssList, User user){
+        super(context, layoutResourceId, rssList);
         mContext = context;
         mUser = user;
         mLayoutResourceId = layoutResourceId;
-        mRssList = rsssList;
+        mRssList = rssList;
     }
 
     @Override
@@ -142,7 +144,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 });
                 mViewHolder.filter.startAnimation(fadeOut);
             }
-            feed.save();
+            feed.update();
         }
     }
 }
