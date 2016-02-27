@@ -15,11 +15,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.models.RSSItem;
+import com.github.newsbeautifier.utils.RSSItemHelper;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -77,7 +75,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         String text = Jsoup.parse(mModel.getContent().isEmpty() ? mModel.getDescription() : mModel.getContent()).text();
         content.setText(text);
 
-        String urlImgDescription = getUrlImgDescription();
+        String urlImgDescription = RSSItemHelper.getUrlImgFromXmlString(mModel.getDescription());
         String urlImage = mModel.getImage();
 
         if (urlImage.isEmpty()){
@@ -133,32 +131,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private String getUrlImgDescription(){
-        Document doc = Jsoup.parse(mModel.getDescription());
-        Elements imgs = doc.select("img");
-        for (int j = 0; j < imgs.size(); j++) {
-            Element img = imgs.get(j);
-            if (img.hasAttr("src")) {
-                String ext = img.attr("src");
-                if (hasAImgExtension(ext)){
-                    return ext;
-                }
-            }
-        }
-        return null;
-    }
-
-    private boolean hasAImgExtension(String fileName){
-        String[] ext = new String[]{"png", "bmp", "jpg", "jpeg"};
-
-        for (String e : ext){
-            if (fileName.endsWith(e) || fileName.endsWith(e.toUpperCase())){
-                return true;
-            }
-        }
-        return false;
     }
 }
 

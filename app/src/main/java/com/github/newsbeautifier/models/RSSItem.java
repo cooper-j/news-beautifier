@@ -4,10 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.github.newsbeautifier.MyDatabase;
+import com.github.newsbeautifier.utils.RSSItemHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import org.jsoup.Jsoup;
 
 /**
  * * NewsBeautifier
@@ -158,6 +161,13 @@ public class RSSItem extends BaseModel implements Parcelable{
 
     public void setDescription(String pDescription) {
         description = pDescription;
+        if (!description.isEmpty()){
+            String url = RSSItemHelper.getUrlImgFromXmlString(description);
+            if (url != null && image.isEmpty()){
+                setImage(url);
+                description = Jsoup.parse(description).text();
+            }
+        }
     }
 
     public String getLanguage() {
