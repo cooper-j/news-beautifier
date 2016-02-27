@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="8dp"
+    card_view:cardCornerRadius="2dp"
     android:layout_marginBottom="16dp">
 
     <RelativeLayout
@@ -27,13 +27,11 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:text=""
-            android:textColor="#ffffff"
             android:layout_below="@+id/article_photo"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:gravity="center_horizontal"
-            android:layout_alignParentBottom="true"
-            android:background="#1976D2"/>
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
