@@ -26,7 +26,6 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
     private DrawerLayout mDrawerLayout;
     private ListView mHeaderList;
-    private NavigationView mNavigationView;
     private ListView mFeedListView;
     private FeedAdapter mFeedAdapter;
     private String[] mTitles;
@@ -36,18 +35,20 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mHeaderList = (ListView) mNavigationView.getHeaderView(0).findViewById(R.id.left_drawer);
+        mHeaderList = (ListView) navigationView.getHeaderView(0).findViewById(R.id.left_drawer);
         mFeedListView = (ListView) findViewById(R.id.feed_list_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
+        if (mDrawerLayout != null) {
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            mDrawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
+        }
         mTitles = getResources().getStringArray(R.array.nav_items);
         mHeaderList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.header_item, mTitles));
@@ -55,10 +56,7 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         mHeaderList.setOnItemClickListener(new HeaderItemClickListener());
 
         ((ListView)findViewById(R.id.settings_list_view)).setOnItemClickListener(settingsItemClickListener);
-        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
-        if (tabletSize) {
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        }
+
         initMyFeeds();
     }
 
@@ -176,7 +174,9 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
         // Highlight the selected item, update the title, and close the drawer
         mHeaderList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
         if (position >= 0 && position < mTitles.length) {
             setTitle(mTitles[position]);
         } else {
