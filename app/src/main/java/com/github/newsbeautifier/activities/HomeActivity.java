@@ -6,15 +6,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,12 +17,23 @@ import android.widget.ListView;
 
 import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
+import com.github.newsbeautifier.fragments.DisplayArticlesFragment;
 import com.github.newsbeautifier.fragments.FeedListFragment;
 import com.github.newsbeautifier.fragments.FeedSelectFragment;
-import com.github.newsbeautifier.fragments.HomeFragment;
 import com.github.newsbeautifier.models.RSSFeed;
+import com.github.newsbeautifier.models.RSSItem;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements FeedListFragment.OnMyFeedsChanged{
+
+    public static final String POSITION = "POSITION";
+    public static final String LIST_TYPE = "LIST_TYPE";
+    private static final int HEADER_TYPE = 0;
+    private static final int FEED_TYPE = 1;
 
     private DrawerLayout mDrawerLayout;
     private ListView mHeaderList;
@@ -60,9 +66,38 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
         mHeaderList.setOnItemClickListener(new HeaderItemClickListener());
 
-        ((ListView)findViewById(R.id.settings_list_view)).setOnItemClickListener(settingsItemClickListener);
+        ((ListView) findViewById(R.id.settings_list_view)).setOnItemClickListener(settingsItemClickListener);
 
         initMyFeeds();
+
+        restoreState(savedInstanceState);
+    }
+
+    private void restoreState(Bundle savedInstanceState){
+        int position = 0;
+        int type = HEADER_TYPE;
+
+        if (savedInstanceState != null){
+            position = savedInstanceState.getInt(POSITION);
+            type = savedInstanceState.getInt(LIST_TYPE);
+        }
+        if (type == HEADER_TYPE){
+            selectHeaderItem(position);
+        } else {
+            selectFeed(position);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mHeaderList.getSelectedItemPosition() != AdapterView.INVALID_POSITION){
+            outState.putInt(POSITION, mHeaderList.getSelectedItemPosition());
+            outState.putInt(LIST_TYPE, HEADER_TYPE);
+        } else if (mFeedListView.getSelectedItemPosition() != AdapterView.INVALID_POSITION){
+            outState.putInt(POSITION, mFeedListView.getSelectedItemPosition());
+            outState.putInt(LIST_TYPE, FEED_TYPE);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private AdapterView.OnItemClickListener settingsItemClickListener = new AdapterView.OnItemClickListener() {
@@ -91,50 +126,38 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
     private void initMyFeeds() {
         mFeedAdapter = new FeedAdapter();
         mFeedListView.setAdapter(mFeedAdapter);
-        mFeedListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                RSSFeed item = mFeedAdapter.getItem(position);
-                item.setUserId(null);
-                item.update();
-                mFeedAdapter.remove(mFeedAdapter.getItem(position));
-                return false;
-            }
-        });
         mFeedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectFeed(mFeedAdapter.getItem(position));
+                selectFeed(position);
             }
         });
     }
 
-    private void selectFeed(RSSFeed feed) {
-        /*RSSFragment feedListFragment = new RSSFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(RSSFragment.FEED, item);
-        feedListFragment.setArguments(bundle);
+    private void selectFeed(int position) {
+        RSSFeed feed = mFeedAdapter.getItem(position);
 
-        mDrawerLayout.closeDrawer(GravityCompat.START);
         mHeaderList.clearChoices();
         mHeaderList.requestLayout();
+        mFeedListView.setSelection(position);
+
+        ArrayList<RSSItem> articles = new ArrayList<>();
+        articles.addAll(feed.getItems());
+
+        DisplayArticlesFragment fragment = new DisplayArticlesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, articles);
+        fragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, feedListFragment)
+                .replace(R.id.content_frame, fragment)
                 .commit();
-                */
-        if (feed.getItems().size() > 0) {
-            Intent intent = new Intent(this, ArticleActivity.class);
-            intent.putExtra(ArticleActivity.ARTICLE, feed.getItems().get(0));
-            startActivity(intent);
-        }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        selectHeaderItem(0);
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        setTitle(feed.toString());
     }
 
     @Override
@@ -164,7 +187,10 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         Fragment fragment = null;
 
         if (position == 0){
-            fragment = new HomeFragment();
+            fragment = new DisplayArticlesFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, getAllArticles());
+            fragment.setArguments(bundle);
         } else if (position == 1){
             fragment = new FeedSelectFragment();
         }
@@ -180,11 +206,31 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
+        mFeedListView.clearChoices();
+        mFeedListView.requestLayout();
+
         if (position >= 0 && position < mTitles.length) {
             setTitle(mTitles[position]);
         } else {
             setTitle(getString(R.string.app_name));
         }
+    }
+
+    private ArrayList<RSSItem> getAllArticles(){
+        List<RSSFeed> feedList = ((MyApplication)(getApplication())).mUser.getFeeds();
+        ArrayList<RSSItem> articleList = new ArrayList<>();
+
+        for (RSSFeed feed : feedList) {
+            articleList.addAll(feed.getItems());
+        }
+
+        Collections.sort(articleList, new Comparator<RSSItem>() {
+            @Override
+            public int compare(final RSSItem object1, final RSSItem object2) {
+                return object1.getPubDate().compareTo(object2.getPubDate());
+            }
+        });
+        return articleList;
     }
 
     private class FeedAdapter extends ArrayAdapter<RSSFeed>{

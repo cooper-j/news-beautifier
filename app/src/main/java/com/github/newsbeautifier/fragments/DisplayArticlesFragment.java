@@ -13,25 +13,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.newsbeautifier.MyApplication;
 import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.adapters.StaggeredRecyclerViewAdapter;
-import com.github.newsbeautifier.models.RSSFeed;
 import com.github.newsbeautifier.models.RSSItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class DisplayArticlesFragment extends Fragment implements SearchView.OnQueryTextListener {
+
+    public static final String ARTICLES = "ARTICLES";
 
     private RecyclerView mRecyclerView;
     private StaggeredRecyclerViewAdapter mAdapter;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private List<RSSItem> mArticleList;
 
-    public HomeFragment() {
+    public DisplayArticlesFragment() {
     }
 
     @Override
@@ -39,7 +37,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        setHasOptionsMenu(true);
+        mArticleList = getArguments().getParcelableArrayList(ARTICLES);
 
         mRecyclerView = (RecyclerView)v.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -47,23 +45,11 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
         mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-        List<RSSFeed> feedList = ((MyApplication)getActivity().getApplication()).mUser.getFeeds();
-        mArticleList = new ArrayList<>();
-
-        for (int i = 0; i < feedList.size(); ++i)
-            mArticleList.addAll(feedList.get(i).getItems());
-
-        Collections.sort(mArticleList, new Comparator<RSSItem>() {
-            @Override
-            public int compare(final RSSItem object1, final RSSItem object2) {
-                return object1.getPubDate().compareTo(object2.getPubDate());
-            }
-        });
-
         mAdapter = new StaggeredRecyclerViewAdapter(getActivity(), mArticleList);
 
         mRecyclerView.setAdapter(mAdapter);
 
+        setHasOptionsMenu(true);
         return v;
     }
 
