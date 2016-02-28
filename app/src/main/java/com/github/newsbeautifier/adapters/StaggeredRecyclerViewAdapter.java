@@ -15,6 +15,7 @@ import com.github.newsbeautifier.R;
 import com.github.newsbeautifier.activities.ArticleActivity;
 import com.github.newsbeautifier.models.RSSItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
     private Activity mActivity;
 
     public StaggeredRecyclerViewAdapter(Activity activity, List<RSSItem> itemList) {
-        this.itemList = itemList;
+        this.itemList = new ArrayList<>(itemList);
         this.mActivity = activity;
     }
 
@@ -51,5 +52,56 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
     @Override
     public int getItemCount() {
         return this.itemList.size();
+    }
+
+    public RSSItem removeItem(int position) {
+        final RSSItem model = itemList.remove(position);
+        notifyItemRemoved(position);
+        return model;
+    }
+
+    public void addItem(int position, RSSItem model) {
+        itemList.add(position, model);
+        notifyItemInserted(position);
+    }
+
+    public void moveItem(int fromPosition, int toPosition) {
+        final RSSItem model = itemList.remove(fromPosition);
+        itemList.add(toPosition, model);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void animateTo(List<RSSItem> models) {
+        applyAndAnimateRemovals(models);
+        applyAndAnimateAdditions(models);
+        applyAndAnimateMovedItems(models);
+    }
+
+    private void applyAndAnimateRemovals(List<RSSItem> newModels) {
+        for (int i = itemList.size() - 1; i >= 0; i--) {
+            final RSSItem model = itemList.get(i);
+            if (!newModels.contains(model)) {
+                removeItem(i);
+            }
+        }
+    }
+
+    private void applyAndAnimateAdditions(List<RSSItem> newModels) {
+        for (int i = 0, count = newModels.size(); i < count; i++) {
+            final RSSItem model = newModels.get(i);
+            if (!itemList.contains(model)) {
+                addItem(i, model);
+            }
+        }
+    }
+
+    private void applyAndAnimateMovedItems(List<RSSItem> newModels) {
+        for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
+            final RSSItem model = newModels.get(toPosition);
+            final int fromPosition = itemList.indexOf(model);
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
     }
 }
