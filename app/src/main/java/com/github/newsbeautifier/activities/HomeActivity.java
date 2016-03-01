@@ -146,6 +146,9 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
             DisplayArticlesFragment fragment = new DisplayArticlesFragment();
             Bundle bundle = new Bundle();
+
+            bundle.putString(DisplayArticlesFragment.FEED_URL, feed.getUrl());
+            bundle.putLong(DisplayArticlesFragment.FEED_USER_ID, feed.getUserId());
             bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, articles);
             fragment.setArguments(bundle);
 
