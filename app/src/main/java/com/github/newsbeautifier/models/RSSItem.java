@@ -221,4 +221,9 @@ public class RSSItem extends BaseModel implements Parcelable{
         dest.writeString(image);
         dest.writeString(pubDate);
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

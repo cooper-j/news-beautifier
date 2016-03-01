@@ -47,4 +47,5 @@
     <string name="feedback_send_title">Send Feedback:</string>
     <string name="feedback_email_title">Feedback</string>
     <string name="about_version">Version</string>
+    <string name="empty_view_text">No news</string>
 </resources>

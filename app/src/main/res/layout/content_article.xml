@@ -31,7 +31,6 @@
             android:id="@+id/article_published_date"
 
             android:textColor="#484848"
-            android:paddingLeft="16dp"
             android:text="Posted on Feb, 24 2016 at 8:52pm"
             android:textSize="16sp"
             android:layout_width="match_parent"
@@ -39,7 +38,6 @@
         <TextView
             android:id="@+id/article_published_author"
 
-            android:paddingLeft="16dp"
             android:text="By GW"
             android:textSize="14sp"
             android:layout_marginBottom="15dp"
