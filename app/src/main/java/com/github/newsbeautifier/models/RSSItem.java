@@ -12,6 +12,8 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.jsoup.Jsoup;
 
+import java.util.Comparator;
+
 /**
  * * NewsBeautifier
  * Created by jerem_000 on 2/18/2016.
@@ -220,5 +222,38 @@ public class RSSItem extends BaseModel implements Parcelable{
         dest.writeString(author);
         dest.writeString(image);
         dest.writeString(pubDate);
+    }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+
+    public static final class DateComparator implements Comparator<RSSItem> {
+        @Override
+        public int compare(RSSItem o1, RSSItem o2) {
+            return o1.getPubDate().compareTo(o2.getPubDate());
+        }
+    }
+
+    public static final class TitleComparator implements Comparator<RSSItem> {
+        @Override
+        public int compare(RSSItem o1, RSSItem o2) {
+            return o1.getTitle().compareTo(o2.getTitle());
+        }
+    }
+
+    public static final class CategoryComparator implements Comparator<RSSItem> {
+        @Override
+        public int compare(RSSItem o1, RSSItem o2) {
+            return o1.getCategory().compareTo(o2.getCategory());
+        }
+    }
+
+    public static final class LanguageComparator implements Comparator<RSSItem> {
+        @Override
+        public int compare(RSSItem o1, RSSItem o2) {
+            return o1.getLanguage().compareTo(o2.getLanguage());
+        }
     }
 }

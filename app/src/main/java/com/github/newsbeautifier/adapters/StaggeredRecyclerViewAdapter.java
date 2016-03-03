@@ -54,6 +54,10 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
         return this.itemList.size();
     }
 
+    public List<RSSItem> getitemList(){
+        return itemList;
+    }
+
     public RSSItem removeItem(int position) {
         final RSSItem model = itemList.remove(position);
         notifyItemRemoved(position);

@@ -10,4 +10,5 @@
     <color name="tileLight">#00000000</color>
     <color name="tileDark">#40000000</color>
     <color name="tileDarkBorder">#50000000</color>
+    <color name="widget_title_article_item_background">#CC000000</color>
 </resources>

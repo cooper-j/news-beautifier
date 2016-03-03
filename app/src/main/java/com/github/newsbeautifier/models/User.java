@@ -2,6 +2,7 @@ package com.github.newsbeautifier.models;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,6 +27,24 @@ public class User {
                     .queryList();
         }
         return feeds;
+    }
+
+    public List<RSSItem> getLastArticlesWithPicture(Integer nbArticles){
+        List<RSSItem> list = new ArrayList<>();
+
+        if (nbArticles > 0) {
+            for (RSSFeed tmp : getFeeds()) {
+                list.addAll(tmp.getItems());
+            }
+            List<RSSItem> f = new ArrayList<>();
+            for (RSSItem tmp : list){
+                if (!tmp.getImage().isEmpty()){
+                    f.add(tmp);
+                }
+            }
+            return nbArticles < f.size() ? f.subList(0, nbArticles) : f;
+        }
+        return list;
     }
 
     public Long getId() {

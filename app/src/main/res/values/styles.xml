@@ -36,7 +36,6 @@
 
     <style name="header_item" parent="drawer_item">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@drawable/header_item_background</item>
     </style>
 
 </resources>

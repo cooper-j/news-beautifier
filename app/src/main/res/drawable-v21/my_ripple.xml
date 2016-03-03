@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable-v21/my_ripple.xml -->
+
+<ripple
+    android:color="@color/background_header_color"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -135,29 +135,33 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
     }
 
     private void selectFeed(int position) {
-        RSSFeed feed = mFeedAdapter.getItem(position);
+        if (position != mFeedListView.getSelectedItemPosition()) {
+            RSSFeed feed = mFeedAdapter.getItem(position);
+            mHeaderList.clearChoices();
+            mHeaderList.requestLayout();
+            mFeedListView.setItemChecked(position, true);
 
-        mHeaderList.clearChoices();
-        mHeaderList.requestLayout();
-        mFeedListView.setSelection(position);
+            ArrayList<RSSItem> articles = new ArrayList<>();
+            articles.addAll(feed.getItems());
 
-        ArrayList<RSSItem> articles = new ArrayList<>();
-        articles.addAll(feed.getItems());
+            DisplayArticlesFragment fragment = new DisplayArticlesFragment();
+            Bundle bundle = new Bundle();
 
-        DisplayArticlesFragment fragment = new DisplayArticlesFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, articles);
-        fragment.setArguments(bundle);
+            bundle.putString(DisplayArticlesFragment.FEED_URL, feed.getUrl());
+            bundle.putLong(DisplayArticlesFragment.FEED_USER_ID, feed.getUserId());
+            bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, articles);
+            fragment.setArguments(bundle);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
 
+            setTitle(feed.toString());
+        }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
-        setTitle(feed.toString());
     }
 
     @Override
@@ -184,35 +188,37 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
 
     /** Swaps fragments in the main content view */
     private void selectHeaderItem(int position) {
-        Fragment fragment = null;
+        if (position != mHeaderList.getSelectedItemPosition()) {
+            Fragment fragment = null;
 
-        if (position == 0){
-            fragment = new DisplayArticlesFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, getAllArticles());
-            fragment.setArguments(bundle);
-        } else if (position == 1){
-            fragment = new FeedSelectFragment();
+            if (position == 0) {
+                fragment = new DisplayArticlesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(DisplayArticlesFragment.ARTICLES, getAllArticles());
+                fragment.setArguments(bundle);
+            } else if (position == 1) {
+                fragment = new FeedSelectFragment();
+            }
+
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+
+            // Highlight the selected item, update the title, and close the drawer
+            mHeaderList.setItemChecked(position, true);
+            mFeedListView.clearChoices();
+            mFeedListView.requestLayout();
+
+            if (position >= 0 && position < mTitles.length) {
+                setTitle(mTitles[position]);
+            } else {
+                setTitle(getString(R.string.app_name));
+            }
         }
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
-
-        // Highlight the selected item, update the title, and close the drawer
-        mHeaderList.setItemChecked(position, true);
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-        mFeedListView.clearChoices();
-        mFeedListView.requestLayout();
-
-        if (position >= 0 && position < mTitles.length) {
-            setTitle(mTitles[position]);
-        } else {
-            setTitle(getString(R.string.app_name));
         }
     }
 
@@ -223,13 +229,6 @@ public class HomeActivity extends AppCompatActivity implements FeedListFragment.
         for (RSSFeed feed : feedList) {
             articleList.addAll(feed.getItems());
         }
-
-        Collections.sort(articleList, new Comparator<RSSItem>() {
-            @Override
-            public int compare(final RSSItem object1, final RSSItem object2) {
-                return object1.getPubDate().compareTo(object2.getPubDate());
-            }
-        });
         return articleList;
     }
 
