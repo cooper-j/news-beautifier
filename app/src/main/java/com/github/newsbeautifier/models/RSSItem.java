@@ -229,17 +229,32 @@ public class RSSItem extends BaseModel implements Parcelable{
         return title;
     }
 
-    public static final class DateComparator implements Comparator<RSSItem> {
+    public static final class DateComparatorAsc implements Comparator<RSSItem> {
         @Override
         public int compare(RSSItem o1, RSSItem o2) {
             return o1.getPubDate().compareTo(o2.getPubDate());
         }
     }
 
-    public static final class TitleComparator implements Comparator<RSSItem> {
+
+    public static final class DateComparatorDesc implements Comparator<RSSItem> {
+        @Override
+        public int compare(RSSItem o1, RSSItem o2) {
+            return o1.getPubDate().compareTo(o2.getPubDate()) * -1;
+        }
+    }
+
+    public static final class TitleComparatorAsc implements Comparator<RSSItem> {
         @Override
         public int compare(RSSItem o1, RSSItem o2) {
             return o1.getTitle().compareTo(o2.getTitle());
+        }
+    }
+
+    public static final class TitleComparatorDesc implements Comparator<RSSItem> {
+        @Override
+        public int compare(RSSItem o1, RSSItem o2) {
+            return o1.getTitle().compareTo(o2.getTitle()) * -1;
         }
     }
 

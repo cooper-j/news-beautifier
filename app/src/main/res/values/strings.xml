@@ -49,8 +49,10 @@
     <string name="about_version">Version</string>
     <string name="empty_view_text">No news</string>
     <string name="sort">Sort</string>
-    <string name="sort_date">Date</string>
-    <string name="sort_title">Title</string>
-    <string name="sort_language">language</string>
-    <string name="sort_category">category</string>
+    <string name="sort_date_new">New news first</string>
+    <string name="sort_date_old">Oldest news first</string>
+    <string name="sort_title_asc">Title A-Z</string>
+    <string name="sort_title_desc">Title Z-A</string>
+    <string name="sort_language">Language</string>
+    <string name="sort_category">Category</string>
 </resources>

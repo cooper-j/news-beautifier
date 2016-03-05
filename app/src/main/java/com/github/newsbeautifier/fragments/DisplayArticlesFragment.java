@@ -62,7 +62,7 @@ public class DisplayArticlesFragment extends Fragment implements SearchView.OnQu
         View v = inflater.inflate(R.layout.fragment_display_articles, container, false);
 
         mArticleList = getArguments().getParcelableArrayList(ARTICLES);
-        Collections.sort(mArticleList, new RSSItem.DateComparator());
+        Collections.sort(mArticleList, new RSSItem.DateComparatorAsc());
         mFeedUrl = getArguments().getString(FEED_URL, null);
         mFeedUserId = getArguments().getLong(FEED_USER_ID, -1);
 
@@ -218,11 +218,17 @@ public class DisplayArticlesFragment extends Fragment implements SearchView.OnQu
     public boolean onMenuItemClick(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.sort_date:
-                sortList(new RSSItem.DateComparator());
+            case R.id.sort_date_asc:
+                sortList(new RSSItem.DateComparatorAsc());
                 return true;
-            case R.id.sort_title:
-                sortList(new RSSItem.TitleComparator());
+            case R.id.sort_date_desc:
+                sortList(new RSSItem.DateComparatorDesc());
+                return true;
+            case R.id.sort_title_asc:
+                sortList(new RSSItem.TitleComparatorAsc());
+                return true;
+            case R.id.sort_title_desc:
+                sortList(new RSSItem.TitleComparatorDesc());
                 return true;
             case R.id.sort_language:
                 sortList(new RSSItem.LanguageComparator());
