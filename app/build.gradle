@@ -21,9 +21,20 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file("../keystore/releasekey.jks")
+            storePassword "P9G!'%Dfk(/#"
+            keyAlias "news_beautifier"
+            keyPassword "P9G!'%Dfk(/#"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

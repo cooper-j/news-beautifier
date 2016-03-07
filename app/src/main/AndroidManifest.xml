@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.newsbeautifier">
+    package="com.github.cooperj.newsbeautifier">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".MyApplication"
+        android:name="com.github.cooperj.newsbeautifier.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".widget.MyAppWidgetProvider" >
+        <receiver android:name="com.github.cooperj.newsbeautifier.widget.MyAppWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -21,11 +21,11 @@
                 android:resource="@xml/app_widget_provider" />
         </receiver>
 
-        <service android:name=".widget.StackWidgetService"
+        <service android:name="com.github.cooperj.newsbeautifier.widget.StackWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="com.github.cooperj.newsbeautifier.activities.SplashScreenActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -35,20 +35,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.HomeActivity"
+            android:name="com.github.cooperj.newsbeautifier.activities.HomeActivity"
             android:label="@string/title_home_activity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.ArticleActivity"
+            android:name="com.github.cooperj.newsbeautifier.activities.ArticleActivity"
             android:launchMode="singleTask"
             android:label="@string/title_activity_article"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.HomeActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY_NAME" android:value=".activities.HomeActivity"/>
+        </activity>
         <activity
-            android:name=".activities.WebViewActivity"
+            android:name="com.github.cooperj.newsbeautifier.activities.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.AboutActivity"
+            android:name="com.github.cooperj.newsbeautifier.activities.AboutActivity"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme"/>
     </application>

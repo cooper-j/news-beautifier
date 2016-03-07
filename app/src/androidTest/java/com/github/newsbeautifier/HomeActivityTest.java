@@ -2,9 +2,7 @@ package com.github.newsbeautifier;
 
 import android.content.Intent;
 
-import com.github.newsbeautifier.activities.HomeActivity;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import com.github.cooperj.newsbeautifier.activities.HomeActivity;
 
 /**
  * Created by james_000 on 2/29/2016.

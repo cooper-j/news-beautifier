@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_version">Version</string>
+    <string name="action_search">Recherche</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="article_author">Ecrit par %1$s</string>
+    <string name="article_continue_to_read"><b>Plus</b></string>
+    <string name="article_cover">Couverture</string>
+    <string name="article_pubDate">Posté par %1$s</string>
+    <string name="drawer_feed_title">Mes flux</string>
+    <string name="empty_view_text">Aucun article</string>
+    <string name="feedback_email_title">Commentaires</string>
+    <string name="feedback_send_title">Envoyer un commentaire</string>
+    <string name="menu_feed_select">Flux RSS</string>
+    <string name="menu_home">Accueil</string>
+    <string name="navigation_drawer_close">Fermer</string>
+    <string name="navigation_drawer_open">Ouvrir</string>
+    <string name="send_to">Envoyer à</string>
+    <string name="sort">Trier par</string>
+    <string name="sort_category">Catégorie</string>
+    <string name="sort_date_new">Articles récents en premier</string>
+    <string name="sort_date_old">Articles anciens en premier</string>
+    <string name="sort_language">Langue</string>
+    <string name="sort_title_asc">Titre A-Z</string>
+    <string name="sort_title_desc">Titre Z-A</string>
+    <string name="title_activity_about">A propos</string>
+    <string name="title_activity_article">Article</string>
+    <string name="title_activity_web_view">Article</string>
+    <string name="title_home_activity">Accueil</string>
+    <string name="settings_about">A propos</string>
+    <string name="settings_send_feedback">Commentaires</string>
+</resources>

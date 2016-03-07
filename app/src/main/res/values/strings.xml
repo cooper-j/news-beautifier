@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">NewsBeautifier</string>
-    <string name="logo">logo</string>
+    <string name="app_name" translatable="false">NewsBeautifier</string>
+    <string name="logo" translatable="false">logo</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,9 +9,11 @@
 
     <!-- drawer items -->
     <string name="menu_home">Home</string>
-    <string name="menu_feed_select">My feeds</string>
+    <string name="menu_feed_select">RSS feeds</string>
     <string name="drawer_feed_title">My feeds</string>
     <string name="action_search">Search</string>
+    <string name="settings_send_feedback">Send feedback</string>
+    <string name="settings_about">About</string>
 
     <!-- string arrays -->
     <string-array name="nav_items" translatable="false">
@@ -19,21 +21,21 @@
         <item>@string/menu_feed_select</item>
     </string-array>
 
-    <string-array name="email_contacts">
+    <string-array name="email_contacts" translatable="false">
         <item>colinjeremie9@gmail.com</item>
         <item>james.cooper@epitech.eu</item>
     </string-array>
 
-    <string-array name="settings_array">
-        <item>Send feedback</item>
-        <item>About</item>
+    <string-array name="settings_array" translatable="false">
+        <item>@string/settings_send_feedback</item>
+        <item>@string/settings_about</item>
     </string-array>
 
     <!-- Titles -->
     <string name="title_home_activity">Home</string>
     <string name="title_activity_article">Article</string>
     <string name="title_activity_about">About</string>
-    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="title_activity_splash_screen" translatable="false">Splash screen</string>
     <string name="title_activity_web_view">Article</string>
 
     <!-- Article's strings -->
@@ -47,8 +49,8 @@
     <string name="feedback_send_title">Send Feedback:</string>
     <string name="feedback_email_title">Feedback</string>
     <string name="about_version">Version</string>
-    <string name="empty_view_text">No news</string>
-    <string name="sort">Sort</string>
+    <string name="empty_view_text">No article</string>
+    <string name="sort">Sort by</string>
     <string name="sort_date_new">New news first</string>
     <string name="sort_date_old">Oldest news first</string>
     <string name="sort_title_asc">Title A-Z</string>
