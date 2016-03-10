@@ -82,7 +82,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
                 Glide.with(mActivity).load(mRssList.get(position).getImage()).into(holder.rssImage);
             holder.rssName.setText(feed.getTitle());
             holder.stateIcon.setVisibility(feed.getUserId() == mUser.getId() ? View.VISIBLE : View.GONE);
-            holder.filter.setVisibility(feed.getUserId() == mUser.getId() ? View.GONE : View.VISIBLE);
+            holder.filter.setVisibility(feed.getUserId() == mUser.getId() ? View.INVISIBLE : View.VISIBLE);
 
             convertView.setOnClickListener(new OnRssFeedClick(holder));
         }
@@ -106,7 +106,6 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         @Override
         public void onClick(View v) {
             RSSFeed feed = mRssList.get(mViewHolder.pos);
-            List<RSSFeed> tmpFeeds = mUser.getFeeds();
             if (mViewHolder.stateIcon.getVisibility() == View.GONE) {
                 mUser.addFeed(feed);
                 feed.setUserId(mUser.getId());
@@ -122,7 +121,7 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        mViewHolder.filter.setVisibility(View.GONE);
+                        mViewHolder.filter.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
