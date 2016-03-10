@@ -32,7 +32,7 @@ public class StaggeredRecyclerViewAdapter  extends RecyclerView.Adapter<Staggere
     @Override
     public StaggeredViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.staggered_list_item, null);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.staggered_list_item, parent, false);
         StaggeredViewHolder rcv = new StaggeredViewHolder(layoutView, mActivity);
         return rcv;
     }

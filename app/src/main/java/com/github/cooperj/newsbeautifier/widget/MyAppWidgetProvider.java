@@ -49,7 +49,7 @@ public class MyAppWidgetProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         refreshUserFeeds(context, appWidgetManager, appWidgetIds);
     }
 

@@ -28,7 +28,7 @@ public class StaggeredViewHolder  extends RecyclerView.ViewHolder implements Vie
     public StaggeredViewHolder(View itemView, Activity activity) {
         super(itemView);
         mActivity = activity;
-        itemView.setOnClickListener(this);
+        itemView.findViewById(R.id.card_view).setOnClickListener(this);
         articleTitle = (TextView) itemView.findViewById(R.id.article_title);
         articlePhoto = (ImageView) itemView.findViewById(R.id.article_photo);
     }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -74,10 +75,14 @@ public class RssGridAdapter extends ArrayAdapter<RSSFeed> {
         convertView.setOnClickListener(new OnRssFeedClick(holder));
         if (mRssList.get(position) != null) {
             holder.pos = position;
-            Glide.with(mActivity).load(mRssList.get(position).getImage()).into(holder.rssImage);
-            holder.rssName.setText(mRssList.get(position).getTitle());
-            holder.stateIcon.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.VISIBLE : View.GONE);
-            holder.filter.setVisibility(mRssList.get(position).getUserId() == mUser.getId() ? View.GONE : View.VISIBLE);
+            RSSFeed feed = mRssList.get(position);
+            if (feed.getImage() == null)
+                holder.rssImage.setImageResource(R.drawable.rss);
+            else
+                Glide.with(mActivity).load(mRssList.get(position).getImage()).into(holder.rssImage);
+            holder.rssName.setText(feed.getTitle());
+            holder.stateIcon.setVisibility(feed.getUserId() == mUser.getId() ? View.VISIBLE : View.GONE);
+            holder.filter.setVisibility(feed.getUserId() == mUser.getId() ? View.GONE : View.VISIBLE);
 
             convertView.setOnClickListener(new OnRssFeedClick(holder));
         }
