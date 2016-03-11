@@ -15,8 +15,8 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.github.newsbeautifier"
-        minSdkVersion 16
+        applicationId "com.github.cooperj.newsbeautifier"
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
